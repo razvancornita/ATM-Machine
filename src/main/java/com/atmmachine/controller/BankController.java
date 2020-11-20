@@ -1,15 +1,16 @@
 package com.atmmachine.controller;
 
-import com.atmmachine.model.BankOperationRequest;
+import com.atmmachine.model.request.BankOperationRequest;
 import com.atmmachine.service.BankService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 
-
+@Controller
 @Slf4j
 public class BankController {
 
