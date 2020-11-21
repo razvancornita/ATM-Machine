@@ -14,6 +14,6 @@ public class BankConstants {
     public static final String AMOUNT_NOT_COMPLETED = "The amount field was left empty. Please complete it";
     public static final String AUTHENTICATED = "The PIN was correct. You are now authorized with card ";
     public static final String ALREADY_AUTHENTICATED = "You are already authenticated. Please deauthenticate the card ";
-    public static final String INVALID_PIN = "PIN must be numeric and must have 4 numbers";
+    public static final String INVALID_PIN = "PIN must be numeric and must have 4 digits";
     public static final String DEAUTHENTICATED = "You have successfully deauthenticated";
 }

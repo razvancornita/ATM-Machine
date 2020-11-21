@@ -40,7 +40,7 @@ public class CardService {
         try {
             Card card = bankDao.getCard(cardId);
             if (request.getNewPin() == null || request.getNewPin().length() != 4
-                    || request.getNewPin().chars().allMatch(Character::isDigit)) {
+                    || !request.getNewPin().chars().allMatch(Character::isDigit)) {
                 throw new IllegalArgumentException(BankConstants.INVALID_PIN);
             }
 
