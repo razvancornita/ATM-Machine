@@ -39,6 +39,11 @@ public class CardService {
     public void changePin(ChangePinRequest request, int cardId) throws CardNotFoundException {
         try {
             Card card = bankDao.getCard(cardId);
+            if (request.getNewPin() == null || request.getNewPin().length() != 4
+                    || request.getNewPin().chars().allMatch(Character::isDigit)) {
+                throw new IllegalArgumentException(BankConstants.INVALID_PIN);
+            }
+
             if (!card.getPin().equals(request.getOldPin())) {
                 log.error("wrong pin inserted");
                 throw new IllegalArgumentException(BankConstants.WRONG_PIN);
@@ -59,9 +64,13 @@ public class CardService {
         log.debug("Card with id {} is authenticated", cardId);
     }
 
-    public void authenticateCard(int cardId) throws AlreadyAuthenticatedException {
-        if(this.cardId != null)
+    public void authenticate(int cardId) throws AlreadyAuthenticatedException {
+        if (this.cardId != null)
             throw new AlreadyAuthenticatedException(this.cardId);
         this.cardId = cardId;
+    }
+
+    public void deauthenticate() {
+        this.cardId = null;
     }
 }

@@ -61,7 +61,7 @@ public class BankService {
 
     private String authenticate(BankOperationRequest request) throws FailedLoginException, CardNotFoundException, SQLException, AlreadyAuthenticatedException {
         AuthenticateOperation authenticateOperation = request.getAuthenticateOperation();
-        cardService.authenticateCard(authenticateOperation.getCardId());
+        cardService.authenticate(authenticateOperation.getCardId());
 
         Card card = cardService.getCard(authenticateOperation.getCardId());
         if (card.getPin().equals(authenticateOperation.getPin())) {

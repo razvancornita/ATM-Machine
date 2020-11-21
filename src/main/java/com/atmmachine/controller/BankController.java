@@ -43,14 +43,26 @@ public class BankController {
         } catch (AccessDeniedException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(BankConstants.CARD_NOT_INSERTED);
         } catch (Exception e) {
-            log.error("failed getBalance for cardId = {}", cardService.getCardId());
+            log.error("failed getBalance");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
 
-    @DeleteMapping(value = "/atmOperation/{cardId}")
-    public ResponseEntity<String> deleteOperation(@PathVariable("cardId") String cardId) {
-        return null;
+    @DeleteMapping(value = "/atmOperation")
+    public ResponseEntity<String> deauthenticate() {
+        log.debug("received deauthenticate request");
+
+        try {
+            cardService.checkIfCardIsAuthenticated();
+            cardService.deauthenticate();
+            log.debug("finished deauthenticating");
+            return ResponseEntity.ok(BankConstants.DEAUTHENTICATED);
+        } catch (AccessDeniedException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(BankConstants.CARD_NOT_INSERTED);
+        } catch (Exception e) {
+            log.error("failed deauthenticating");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
     }
 
     @PostMapping(value = "/atmOperation")

@@ -79,6 +79,24 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Deauthenticate",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8090/atmOperation",
+							"host": [
+								"localhost"
+							],
+							"port": "8090",
+							"path": [
+								"atmOperation"
+							]
+						}
+					},
+					"response": []
 				}
 			],
 			"protocolProfileBehavior": {}
@@ -148,6 +166,26 @@
 					"name": "GetBalance",
 					"request": {
 						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://razvans-atm-simulator.herokuapp.com/atmOperation",
+							"protocol": "https",
+							"host": [
+								"razvans-atm-simulator",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"atmOperation"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Deauthenticate",
+					"request": {
+						"method": "DELETE",
 						"header": [],
 						"url": {
 							"raw": "https://razvans-atm-simulator.herokuapp.com/atmOperation",
