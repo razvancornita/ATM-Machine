@@ -1,11 +1,11 @@
 package com.atmmachine.model.request;
 
+import com.atmmachine.model.Currency;
 import lombok.Getter;
 
-import java.math.BigDecimal;
 
 @Getter
 public class DepositOrWithdrawOperation {
-    private BigDecimal amount;
-    private String currency;
+    private Double amount;
+    private Currency currency;
 }

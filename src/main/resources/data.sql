@@ -21,7 +21,6 @@ INSERT INTO bank_account (id, owner_first_name, owner_last_name, currency, balan
 INSERT INTO bank_account (id, owner_first_name, owner_last_name, currency, balance) VALUES (90460, 'Cezara', 'Avram', 'RON', 12034.5);
 INSERT INTO bank_account (id, owner_first_name, owner_last_name, currency, balance) VALUES (10452, 'Ioana-Larisa', 'Marin', 'RON', 33210.0);
 INSERT INTO bank_account (id, owner_first_name, owner_last_name, currency, balance) VALUES (86396, 'Zane', 'Schaefer', 'USD', 22.67);
-INSERT INTO bank_account (id, owner_first_name, owner_last_name, currency, balance) VALUES (55393, 'Cillian', 'Perkins', 'GBP', 2438.11);
 INSERT INTO bank_account (id, owner_first_name, owner_last_name, currency, balance) VALUES (14090, 'Anton', 'Grigore', 'RON', 95120.5);
 INSERT INTO bank_account (id, owner_first_name, owner_last_name, currency, balance) VALUES (86577, 'Cristiana', 'Iacob', 'RON', 130.9);
 INSERT INTO bank_account (id, owner_first_name, owner_last_name, currency, balance) VALUES (43437, 'Daniel', 'Miron', 'EUR', 3428.22);
@@ -36,9 +35,6 @@ INSERT INTO card (id, bank_account_id, pin) VALUES (433, 90460, '3244');
 INSERT INTO card (id, bank_account_id, pin) VALUES (635, 10452, '1215');
 INSERT INTO card (id, bank_account_id, pin) VALUES (814, 10452, '0449');
 INSERT INTO card (id, bank_account_id, pin) VALUES (860, 86396, '6465');
-INSERT INTO card (id, bank_account_id, pin) VALUES (944, 55393, '6079');
-INSERT INTO card (id, bank_account_id, pin) VALUES (482, 55393, '8350');
-INSERT INTO card (id, bank_account_id, pin) VALUES (920, 55393, '4430');
 INSERT INTO card (id, bank_account_id, pin) VALUES (727, 14090, '8658');
 INSERT INTO card (id, bank_account_id, pin) VALUES (516, 14090, '6597');
 INSERT INTO card (id, bank_account_id, pin) VALUES (191, 86577, '5275');

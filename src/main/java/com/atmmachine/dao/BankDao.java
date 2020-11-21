@@ -26,11 +26,11 @@ public class BankDao {
     @Value("${atmMachine.getCard}")
     private String getCardQuery;
 
-    @Value("${atmMachine.getAccountId}")
-    private String getAccountIdQuery;
-
     @Value("${atmMachine.changePin}")
     private String changePinQuery;
+
+    @Value("${atmMachine.changeAccountBalance}")
+    private String changeAccountBalanceQuery;
 
     public BankAccount getAccount(int bankAccountId) {
         log.debug("getting bank account  for id = {}", bankAccountId);
@@ -46,7 +46,6 @@ public class BankDao {
             log.error("error getting bank account for id = {}", bankAccountId, e);
             throw e;
         }
-
     }
 
     public Card getCard(int cardId) throws CardNotFoundException {
@@ -78,12 +77,14 @@ public class BankDao {
         }
     }
 
-    public void deposit() {
-
-    }
-
-    public void withdraw() {
-
-
+    public void changeAccountBalance(int accountId, double newAmount) {
+        log.debug("changing account balance, id = {}, newAmount = {}", accountId, newAmount);
+        try {
+            jdbcTemplate.update(changeAccountBalanceQuery, newAmount, accountId);
+            log.debug("changed account balance for cardId = {}", accountId);
+        } catch (Exception e) {
+            log.error("error changing account balance for cardId = {}", accountId, e);
+            throw e;
+        }
     }
 }

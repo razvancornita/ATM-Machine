@@ -11,6 +11,6 @@ public class BankAccount {
     private int id;
     private String ownerFirstName;
     private String ownerLastName;
-    private String currency;
+    private Currency currency;
     private Double balance;
 }

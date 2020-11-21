@@ -12,4 +12,7 @@ public class BankConstants {
     public static final String ALREADY_AUTHENTICATED = "You are already authenticated. Please deauthenticate the card ";
     public static final String INVALID_PIN = "PIN must be numeric and must have 4 digits";
     public static final String DEAUTHENTICATED = "You have successfully deauthenticated";
+    public static final String CURRENCY_NOT_SUPPORTED = "The entered currency is not supported. Please enter only EUR/RON/USD";
+    public static final String INSUFFICIENT_FUNDS = "Insufficient funds. Please try again";
+    public static final String BALANCE_CHANGED_SUCCESSFULLY = "Operation finished successfully. Your new balance is " ;
 }

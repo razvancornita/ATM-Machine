@@ -26,6 +26,9 @@ public class CardService {
     @Autowired
     BankDao bankDao;
 
+    @Autowired
+    AccountService accountService;
+
     public Card getCard(int cardId) throws CardNotFoundException, SQLException {
         try {
             return bankDao.getCard(cardId);

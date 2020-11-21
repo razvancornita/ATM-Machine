@@ -3,6 +3,7 @@ package com.atmmachine.controller;
 import com.atmmachine.constants.BankConstants;
 import com.atmmachine.exceptions.AlreadyAuthenticatedException;
 import com.atmmachine.exceptions.CardNotFoundException;
+import com.atmmachine.exceptions.InsufficientFundsException;
 import com.atmmachine.model.BankAccount;
 import com.atmmachine.model.request.BankOperationRequest;
 import com.atmmachine.model.request.ChangePinRequest;
@@ -22,19 +23,20 @@ import java.nio.file.AccessDeniedException;
 @Slf4j
 public class BankController {
 
-    @Autowired
     BankService bankService;
-
-    @Autowired
     AccountService accountService;
+    CardService cardService;
 
     @Autowired
-    CardService cardService;
+    public BankController(BankService bankService, AccountService accountService, CardService cardService) {
+        this.bankService = bankService;
+        this.accountService = accountService;
+        this.cardService = cardService;
+    }
 
     @GetMapping(value = "/atmOperation")
     public ResponseEntity<String> getBalance() {
         log.debug("received getBalance request");
-
         try {
             cardService.checkIfCardIsAuthenticated();
             BankAccount bankAccount = accountService.getAccountByCardId(cardService.getCardId());
@@ -51,7 +53,6 @@ public class BankController {
     @DeleteMapping(value = "/atmOperation")
     public ResponseEntity<String> deauthenticate() {
         log.debug("received deauthenticate request");
-
         try {
             cardService.checkIfCardIsAuthenticated();
             cardService.deauthenticate();
@@ -66,14 +67,15 @@ public class BankController {
     }
 
     @PostMapping(value = "/atmOperation")
-    public ResponseEntity postOperation(@RequestBody BankOperationRequest request) {
+    public ResponseEntity<String> atmOperation(@RequestBody BankOperationRequest request) {
         log.debug("received request {}", request.getOperationType());
         try {
+            bankService.validateRequest(request);
             String message = bankService.handleOperation(request);
             log.debug("operation {} completed successfully", request.getOperationType());
-
-            //TODO
             return ResponseEntity.ok(message);
+        } catch (InsufficientFundsException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         } catch (CardNotFoundException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (AlreadyAuthenticatedException e) {
@@ -88,7 +90,7 @@ public class BankController {
     }
 
     @PutMapping(value = "/atmOperation")
-    public ResponseEntity changePin(@RequestBody ChangePinRequest request) {
+    public ResponseEntity<String> changePin(@RequestBody ChangePinRequest request) {
         log.debug("received changePin request");
         try {
             cardService.checkIfCardIsAuthenticated();
