@@ -1,0 +1,118 @@
+{
+	"info": {
+		"_postman_id": "8b56d998-8b91-404b-b9c5-5e7eeace32ae",
+		"name": "ATM-Simulator",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Local",
+			"item": [
+				{
+					"name": "GetBalance",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8090/atmOperation/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8090",
+							"path": [
+								"atmOperation",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ChangePin",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \n    \"cardId\": 191,\n    \"oldPin\": 5275,\n    \"newPin\": 3333\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8090/atmOperation",
+							"host": [
+								"localhost"
+							],
+							"port": "8090",
+							"path": [
+								"atmOperation"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Heroku",
+			"item": [
+				{
+					"name": "GetBalance",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://razvans-atm-simulator.herokuapp.com/atmOperation/1",
+							"protocol": "https",
+							"host": [
+								"razvans-atm-simulator",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"atmOperation",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ChangePin",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \n    \"cardId\": 191,\n    \"oldPin\": 5275,\n    \"newPin\": 3333\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://razvans-atm-simulator.herokuapp.com/atmOperation",
+							"protocol": "https",
+							"host": [
+								"razvans-atm-simulator",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"atmOperation"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"protocolProfileBehavior": {}
+}
