@@ -12,6 +12,6 @@ public class BankConstants {
     public static final String NO_OPERATION_INSERTED = "No operation was entered. Please enter an operation name";
     public static final String CARD_OR_PIN_NOT_COMPLETED = "The id or pin field was left empty. Please complete it";
     public static final String AMOUNT_NOT_COMPLETED = "The amount field was left empty. Please complete it";
-    public static final String AUTHENTICATED = "The PIN was correct. You are now authorized";
-    public static final String ALREADY_AUTHENTICATED = "You are already authenticated. Please deauthenticate first";
+    public static final String AUTHENTICATED = "The PIN was correct. You are now authorized with card ";
+    public static final String ALREADY_AUTHENTICATED = "You are already authenticated. Please deauthenticate the card ";
 }

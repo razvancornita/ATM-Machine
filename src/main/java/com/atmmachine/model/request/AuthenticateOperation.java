@@ -5,5 +5,5 @@ import lombok.Getter;
 @Getter
 public class AuthenticateOperation {
     private Integer cardId;
-    private Integer pin;
+    private String pin;
 }

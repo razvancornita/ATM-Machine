@@ -63,9 +63,9 @@ public class BankService {
         AuthenticateOperation authenticateOperation = request.getAuthenticateOperation();
 
         Card card = cardService.getCard(authenticateOperation.getCardId());
-        if (card.getPin() == authenticateOperation.getPin()) {
+        if (card.getPin().equals(authenticateOperation.getPin())) {
             cardService.authenticateCard(authenticateOperation.getCardId());
-            return BankConstants.AUTHENTICATED;
+            return BankConstants.AUTHENTICATED + authenticateOperation.getCardId();
         } else {
             throw new FailedLoginException(BankConstants.WRONG_PIN);
         }

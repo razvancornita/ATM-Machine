@@ -10,5 +10,5 @@ import lombok.ToString;
 public class Card {
     private int id;
     private int bankAccountId;
-    private int pin;
+    private String pin;
 }

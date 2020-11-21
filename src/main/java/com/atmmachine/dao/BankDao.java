@@ -65,11 +65,11 @@ public class BankDao {
         }
     }
 
-    public void changeCardPin(int cardId, int oldPin) {
+    public void changeCardPin(int cardId, String oldPin) {
         log.debug("changing pin for cardId = {}", cardId);
         try {
             Object[] params = {oldPin, cardId};
-            int[] types = {Types.INTEGER, Types.INTEGER};
+            int[] types = {Types.VARCHAR, Types.INTEGER};
             jdbcTemplate.update(changePinQuery, params, types);
             log.debug("changed pin for cardId = {}", cardId);
         } catch (Exception e) {

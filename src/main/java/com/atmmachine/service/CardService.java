@@ -36,10 +36,10 @@ public class CardService {
         }
     }
 
-    public void changePin(ChangePinRequest request, int cardId) throws SQLException, CardNotFoundException {
+    public void changePin(ChangePinRequest request, int cardId) throws CardNotFoundException {
         try {
             Card card = bankDao.getCard(cardId);
-            if (card.getPin() != request.getOldPin()) {
+            if (!card.getPin().equals(request.getOldPin())) {
                 log.error("wrong pin inserted");
                 throw new IllegalArgumentException(BankConstants.WRONG_PIN);
             } else {
@@ -47,8 +47,6 @@ public class CardService {
             }
         } catch (EmptyResultDataAccessException e) {
             throw new CardNotFoundException();
-        } catch (Exception e) {
-            throw new SQLException(BankConstants.PIN_CHANGED_FAILED);
         }
     }
 
@@ -56,14 +54,14 @@ public class CardService {
         log.debug("Checking if card is authenticated");
         if (cardId == null) {
             log.error("Card is not authenticated");
-            throw new AccessDeniedException("Please enter a card!");
+            throw new AccessDeniedException(BankConstants.CARD_NOT_INSERTED);
         }
         log.debug("Card with id {} is authenticated", cardId);
     }
 
     public void authenticateCard(int cardId) throws AlreadyAuthenticatedException {
         if(this.cardId != null)
-            throw new AlreadyAuthenticatedException();
+            throw new AlreadyAuthenticatedException(this.cardId);
         this.cardId = cardId;
     }
 }

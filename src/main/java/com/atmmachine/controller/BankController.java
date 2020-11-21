@@ -64,9 +64,9 @@ public class BankController {
             return ResponseEntity.ok(message);
         } catch (CardNotFoundException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        } catch(AlreadyAuthenticatedException e) {
+        } catch (AlreadyAuthenticatedException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
-        } catch(IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             log.error("no operation inserted");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (Exception e) {
@@ -84,7 +84,9 @@ public class BankController {
             log.debug("completed changePin request");
             return ResponseEntity.ok(BankConstants.PIN_CHANGED_SUCCESS);
         } catch (AccessDeniedException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(BankConstants.CARD_NOT_INSERTED);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
         } catch (Exception e) {
             log.error("failed changePin");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
