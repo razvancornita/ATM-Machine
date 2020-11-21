@@ -18,6 +18,8 @@
 		<relativePath />
 	</parent>
 
+
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -83,6 +85,15 @@
 					<target>15</target>
 					<verbose>true</verbose>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>com.heroku.sdk</groupId>
+				<artifactId>heroku-maven-plugin</artifactId>
+				<version>3.0.3</version>
+				<configuration>
+					<jdkVersion>1.15</jdkVersion>
+				</configuration>
+
 			</plugin>
 		</plugins>
 	</build>
