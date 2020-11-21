@@ -46,6 +46,7 @@ public class CardService {
         try {
             if (request.getNewPin() == null || request.getNewPin().length() != 4
                     || !request.getNewPin().chars().allMatch(Character::isDigit)) {
+                log.error("pin {} is invalid", request.getNewPin());
                 throw new IllegalArgumentException(BankConstants.INVALID_PIN);
             }
 
@@ -61,21 +62,25 @@ public class CardService {
     }
 
     public void checkIfCardIsAuthenticated() throws AccessDeniedException {
-        log.debug("Checking if card is authenticated");
+        log.debug("checking if card is authenticated");
         if (cardId == null) {
-            log.error("Card is not authenticated");
+            log.error("card is not authenticated");
             throw new AccessDeniedException(BankConstants.CARD_NOT_INSERTED);
         }
-        log.debug("Card with id {} is authenticated", cardId);
+        log.debug("card with id {} is authenticated", cardId);
     }
 
     public void authenticate(int cardId) throws AlreadyAuthenticatedException {
-        if (this.cardId != null)
+        log.debug("authenticating card with id = {}", cardId);
+        if (this.cardId != null) {
+            log.error("there is already an authenticated card");
             throw new AlreadyAuthenticatedException(this.cardId);
+        }
         this.cardId = cardId;
     }
 
     public void deauthenticate() {
+        log.debug("authenticating card with id = {}", cardId);
         this.cardId = null;
     }
 }

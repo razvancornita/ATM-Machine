@@ -48,17 +48,20 @@ public class BankService {
 
     public void validateRequest(BankOperationRequest request) {
         if (request.getOperationType() == null) {
+            log.error("operationType not completed");
             throw new IllegalArgumentException(BankConstants.NO_OPERATION_INSERTED);
         }
 
         if (request.getOperationType() == OperationType.AUTHENTICATE) {
             AuthenticateRequest authenticateRequest = request.getAuthenticateRequest();
             if (authenticateRequest.getCardId() == null || authenticateRequest.getPin() == null) {
+                log.error("cardId or pin not completed");
                 throw new IllegalArgumentException(BankConstants.CARD_OR_PIN_NOT_COMPLETED);
             }
         } else {
             DepositOrWithdrawRequest depositOrWithdrawRequest = request.getDepositOrWithdrawRequest();
             if (depositOrWithdrawRequest.getAmount() == null) {
+                log.error("amount not completed");
                 throw new IllegalArgumentException(BankConstants.AMOUNT_NOT_COMPLETED);
             }
         }
@@ -67,8 +70,8 @@ public class BankService {
     private String authenticate(BankOperationRequest request) throws FailedLoginException, CardNotFoundException, SQLException, AlreadyAuthenticatedException {
         AuthenticateRequest authenticateRequest = request.getAuthenticateRequest();
         Card card = cardService.getCard(authenticateRequest.getCardId());
-        cardService.authenticate(authenticateRequest.getCardId());
         if (card.getPin().equals(authenticateRequest.getPin())) {
+            cardService.authenticate(authenticateRequest.getCardId());
             return BankConstants.AUTHENTICATED + authenticateRequest.getCardId();
         } else {
             throw new FailedLoginException(BankConstants.WRONG_PIN);

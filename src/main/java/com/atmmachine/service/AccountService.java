@@ -21,8 +21,12 @@ import java.sql.SQLException;
 @Slf4j
 public class AccountService {
 
-    @Autowired
     BankDao bankDao;
+
+    @Autowired
+    public AccountService(BankDao bankDao) {
+        this.bankDao = bankDao;
+    }
 
     public BankAccount getAccountByCardId(int cardId) throws SQLException, CardNotFoundException {
         try {
@@ -52,9 +56,13 @@ public class AccountService {
 
     private double calculateAmount(BankAccount bankAccount, DepositOrWithdrawRequest operation) {
         if (operation.getCurrency() == null || bankAccount.getCurrency().equals(operation.getCurrency())) {
+            log.debug("will withdraw {} {}", operation.getAmount(), operation.getCurrency());
             return operation.getAmount();
         } else {
-            return calculateAmountFromDifferentCurrency(operation.getAmount(), operation.getCurrency(), bankAccount.getCurrency());
+
+            double amount = calculateAmountFromDifferentCurrency(operation.getAmount(), operation.getCurrency(), bankAccount.getCurrency());
+            log.debug("will withdraw {} {}", operation.getAmount(), operation.getCurrency());
+            return amount;
         }
     }
 

@@ -15,7 +15,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"operationType\": \"AUTHENTICATE\",\n    \"authenticateOperation\": {\n        \"cardId\": 191,\n        \"pin\": \"5275\"\n    }\n}",
+							"raw": "{\n    \"operationType\": \"AUTHENTICATE\",\n    \"authenticateRequest\": {\n        \"cardId\": 191,\n        \"pin\": \"5275\"\n    }\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -105,7 +105,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"operationType\": \"DEPOSIT\",\n    \"depositOrWithdrawOperation\": {\n        \"amount\": 100,\n        \"currency\": \"EUR\"\n    }\n}",
+							"raw": "{\n    \"operationType\": \"DEPOSIT\",\n    \"depositOrWithdrawRequest\": {\n        \"amount\": 100,\n        \"currency\": \"EUR\"\n    }\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -132,7 +132,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"operationType\": \"WITHDRAW\",\n    \"depositOrWithdrawOperation\": {\n        \"amount\": 100,\n        \"currency\": \"USD\"\n    }\n}",
+							"raw": "{\n    \"operationType\": \"WITHDRAW\",\n    \"depositOrWithdrawRequest\": {\n        \"amount\": 100,\n        \"currency\": \"USD\"\n    }\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -165,7 +165,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"operationType\": \"AUTHENTICATE\",\n    \"authenticateOperation\": {\n        \"cardId\": 191,\n        \"pin\": \"5275\"\n    }\n}",
+							"raw": "{\n    \"operationType\": \"AUTHENTICATE\",\n    \"authenticateRequest\": {\n        \"cardId\": 191,\n        \"pin\": \"5275\"\n    }\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -263,7 +263,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"operationType\": \"DEPOSIT\",\n    \"depositOrWithdrawOperation\": {\n        \"amount\": 191,\n        \"currency\": \"RON\"\n    }\n}",
+							"raw": "{\n    \"operationType\": \"DEPOSIT\",\n    \"depositOrWithdrawRequest\": {\n        \"amount\": 191,\n        \"currency\": \"RON\"\n    }\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -292,7 +292,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"operationType\": \"WITHDRAW\",\n    \"depositOrWithdrawOperation\": {\n        \"amount\": 191,\n        \"currency\": \"RON\"\n    }\n}",
+							"raw": "{\n    \"operationType\": \"WITHDRAW\",\n    \"depositOrWithdrawRequest\": {\n        \"amount\": 191,\n        \"currency\": \"RON\"\n    }\n}",
 							"options": {
 								"raw": {
 									"language": "json"
