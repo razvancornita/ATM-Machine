@@ -1,17 +1,18 @@
 package com.atmmachine.service;
 
-import com.atmmachine.config.AuthenticatedCard;
 import com.atmmachine.constants.BankConstants;
 import com.atmmachine.dao.BankDao;
-import com.atmmachine.model.BankAccount;
+import com.atmmachine.exceptions.CardNotFoundException;
 import com.atmmachine.model.Card;
-import com.atmmachine.model.request.ChangePinRequest;
+import com.atmmachine.model.request.AuthenticateOperation;
+import com.atmmachine.model.request.BankOperationRequest;
+import com.atmmachine.model.request.DepositOrWithdrawOperation;
+import com.atmmachine.model.request.OperationType;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
-import java.nio.file.AccessDeniedException;
+import javax.security.auth.login.FailedLoginException;
 import java.sql.SQLException;
 
 @Service
@@ -21,44 +22,51 @@ public class BankService {
     @Autowired
     BankDao bankDao;
 
+    @Autowired
+    CardService cardService;
 
-    public BankAccount getAccount(int cardId) throws SQLException {
-        try {
-            int bankAccountId = getBankAccountIdForCardId(cardId);
-            return bankDao.getAccount(bankAccountId);
-        } catch (Exception e) {
-            throw new SQLException(e.getMessage());
-        }
-    }
 
-    private int getBankAccountIdForCardId(int cardId) throws SQLException {
-        try {
-            return bankDao.getAccountIdForCardId(cardId);
-        } catch (EmptyResultDataAccessException e) {
-            throw new SQLException(BankConstants.ACCOUNT_NOT_FOUND);
-        } catch (Exception e) {
-            throw new SQLException(BankConstants.ERR_INTERNAL);
-        }
-    }
+    public String handleOperation(BankOperationRequest request) throws CardNotFoundException, FailedLoginException, SQLException {
+        validateRequest(request);
 
-    public void changePin(ChangePinRequest request) throws SQLException, AccessDeniedException {
-        try {
-            AuthenticatedCard.checkIfCardIsAuthenticated();
-            Card card = bankDao.getCard(AuthenticatedCard.getCardId());
-            if (card.getPin() != request.getOldPin()) {
-                log.error("wrong pin inserted");
-                throw new IllegalArgumentException(BankConstants.WRONG_PIN);
-            } else {
-                bankDao.changeCardPin(AuthenticatedCard.getCardId(), request.getNewPin());
+        switch (request.getOperationType()) {
+            case AUTHENTICATE -> {
+                return authenticate(request);
             }
-        } catch (EmptyResultDataAccessException e) {
-            throw new SQLException(BankConstants.CARD_NOT_FOUND);
-        } catch (AccessDeniedException e) {
-            throw new AccessDeniedException(BankConstants.CARD_NOT_INSERTED);
-        } catch (Exception e) {
-            throw new SQLException(BankConstants.PIN_CHANGED_FAILED);
+            case DEPOSIT -> bankDao.deposit();
+            case WITHDRAW -> bankDao.withdraw();
         }
+        return null;
     }
 
 
+    private void validateRequest(BankOperationRequest request) {
+        if (request.getOperationType() == null) {
+            throw new IllegalArgumentException(BankConstants.NO_OPERATION_INSERTED);
+        }
+
+        if (request.getOperationType() == OperationType.AUTHENTICATE) {
+            AuthenticateOperation authenticateOperation = request.getAuthenticateOperation();
+            if (authenticateOperation.getCardId() == null || authenticateOperation.getPin() == null) {
+                throw new IllegalArgumentException(BankConstants.CARD_OR_PIN_NOT_COMPLETED);
+            }
+        } else {
+            DepositOrWithdrawOperation depositOrWithdrawOperation = request.getDepositOrWithdrawOperation();
+            if (depositOrWithdrawOperation.getAmount() == null) {
+                throw new IllegalArgumentException(BankConstants.AMOUNT_NOT_COMPLETED);
+            }
+        }
+    }
+
+    private String authenticate(BankOperationRequest request) throws FailedLoginException, CardNotFoundException, SQLException {
+        AuthenticateOperation authenticateOperation = request.getAuthenticateOperation();
+
+        Card card = cardService.getCard(authenticateOperation.getCardId());
+        if (card.getPin() == authenticateOperation.getPin()) {
+            cardService.authenticateCard(authenticateOperation.getCardId());
+            return BankConstants.AUTHENTICATED;
+        } else {
+            throw new FailedLoginException(BankConstants.WRONG_PIN);
+        }
+    }
 }

@@ -1,7 +1,9 @@
 package com.atmmachine.model.request;
 
-public class BankOperationRequest {
+import lombok.Getter;
 
+@Getter
+public class BankOperationRequest {
     OperationType operationType;
     AuthenticateOperation authenticateOperation;
     DepositOrWithdrawOperation depositOrWithdrawOperation;

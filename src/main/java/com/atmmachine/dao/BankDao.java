@@ -1,5 +1,6 @@
 package com.atmmachine.dao;
 
+import com.atmmachine.exceptions.CardNotFoundException;
 import com.atmmachine.model.BankAccount;
 import com.atmmachine.model.Card;
 import lombok.extern.slf4j.Slf4j;
@@ -48,7 +49,7 @@ public class BankDao {
 
     }
 
-    public Card getCard(int cardId) {
+    public Card getCard(int cardId) throws CardNotFoundException {
         log.debug("getting card for cardId = {}", cardId);
         try {
             Object[] params = {cardId};
@@ -57,25 +58,9 @@ public class BankDao {
             return card;
         } catch (EmptyResultDataAccessException e) {
             log.error("no card found for id = {}", cardId);
-            throw e;
+            throw new CardNotFoundException();
         } catch (Exception e) {
             log.error("error getting card for id = {}", cardId, e);
-            throw e;
-        }
-    }
-
-    public int getAccountIdForCardId(int cardId) {
-        log.debug("getting bank account id for cardId = {}", cardId);
-        try {
-            Object[] params = {cardId};
-            Integer bankAccountId = jdbcTemplate.queryForObject(getAccountIdQuery, params, Integer.class);
-            log.debug("got bank account id = {} for cardId = {}", bankAccountId, cardId);
-            return bankAccountId;
-        } catch (EmptyResultDataAccessException e) {
-            log.error("no bank account found for cardId = {}", cardId);
-            throw e;
-        } catch (Exception e) {
-            log.error("error getting bank account id for cardId = {}", cardId, e);
             throw e;
         }
     }
@@ -91,5 +76,14 @@ public class BankDao {
             log.error("error changing pin for cardId = {}", cardId, e);
             throw e;
         }
+    }
+
+    public void deposit() {
+
+    }
+
+    public void withdraw() {
+
+
     }
 }

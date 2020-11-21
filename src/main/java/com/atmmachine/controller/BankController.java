@@ -1,16 +1,21 @@
 package com.atmmachine.controller;
 
 import com.atmmachine.constants.BankConstants;
+import com.atmmachine.exceptions.CardNotFoundException;
 import com.atmmachine.model.BankAccount;
 import com.atmmachine.model.request.BankOperationRequest;
 import com.atmmachine.model.request.ChangePinRequest;
+import com.atmmachine.service.AccountService;
 import com.atmmachine.service.BankService;
+import com.atmmachine.service.CardService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import java.nio.file.AccessDeniedException;
 
 @Controller
 @Slf4j
@@ -19,15 +24,25 @@ public class BankController {
     @Autowired
     BankService bankService;
 
-    @GetMapping(value = "/atmOperation/{cardId}")
-    public ResponseEntity<String> getBalance(@PathVariable("cardId") Integer cardId) {
-        log.debug("received getBalance request for cardId = {}", cardId);
+    @Autowired
+    AccountService accountService;
+
+    @Autowired
+    CardService cardService;
+
+    @GetMapping(value = "/atmOperation")
+    public ResponseEntity<String> getBalance() {
+        log.debug("received getBalance request");
+
         try {
-            BankAccount bankAccount = bankService.getAccount(cardId);
-            log.debug("completed getBalance request with account = {} for cardId = {}", bankAccount, cardId);
+            cardService.checkIfCardIsAuthenticated();
+            BankAccount bankAccount = accountService.getAccountByCardId(cardService.getCardId());
+            log.debug("completed getBalance request with account = {} for cardId = {}", bankAccount, cardService.getCardId());
             return ResponseEntity.ok(bankAccount.getBalance() + " " + bankAccount.getCurrency() + " left");
+        } catch (AccessDeniedException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(BankConstants.CARD_NOT_INSERTED);
         } catch (Exception e) {
-            log.error("failed getBalance for cardId = {}", cardId);
+            log.error("failed getBalance for cardId = {}", cardService.getCardId());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
@@ -38,17 +53,35 @@ public class BankController {
     }
 
     @PostMapping(value = "/atmOperation")
-    public ResponseEntity getOperation(@RequestBody BankOperationRequest request) {
-        return null;
+    public ResponseEntity postOperation(@RequestBody BankOperationRequest request) {
+        log.debug("received request {}", request.getOperationType());
+        try {
+            String message = bankService.handleOperation(request);
+            log.debug("operation {} completed successfully", request.getOperationType());
+
+            //TODO
+            return ResponseEntity.ok(message);
+        } catch (CardNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (IllegalArgumentException e) {
+            log.error("no operation inserted");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (Exception e) {
+            log.error("operation {} failed", request.getOperationType());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
     }
 
     @PutMapping(value = "/atmOperation")
     public ResponseEntity changePin(@RequestBody ChangePinRequest request) {
         log.debug("received changePin request");
         try {
-            bankService.changePin(request);
+            cardService.checkIfCardIsAuthenticated();
+            cardService.changePin(request, cardService.getCardId());
             log.debug("completed changePin request");
             return ResponseEntity.ok(BankConstants.PIN_CHANGED_SUCCESS);
+        } catch (AccessDeniedException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(BankConstants.CARD_NOT_INSERTED);
         } catch (Exception e) {
             log.error("failed changePin");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());

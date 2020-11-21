@@ -1,6 +1,9 @@
 package com.atmmachine.model.request;
 
+import lombok.Getter;
+
+@Getter
 public class AuthenticateOperation {
-    private int cardId;
-    private int pin;
+    private Integer cardId;
+    private Integer pin;
 }

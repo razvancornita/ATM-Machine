@@ -7,6 +7,10 @@ public class BankConstants {
     public static final String PIN_CHANGED_SUCCESS = "PIN changed successfully";
     public static final String PIN_CHANGED_FAILED = "Failed changing PIN";
     public static final String CARD_NOT_FOUND = "The card with the specified id does not exist";
-    public static final String WRONG_PIN = "Old PIN is incorrect";
+    public static final String WRONG_PIN = "PIN is incorrect";
     public static final String CARD_NOT_INSERTED = "No card was inserted. Please insert a card first";
+    public static final String NO_OPERATION_INSERTED = "No operation was entered. Please enter an operation name";
+    public static final String CARD_OR_PIN_NOT_COMPLETED = "The id or pin field was left empty. Please complete it";
+    public static final String AMOUNT_NOT_COMPLETED = "The amount field was left empty. Please complete it";
+    public static final String AUTHENTICATED = "The PIN was correct. You are now authorized";
 }
