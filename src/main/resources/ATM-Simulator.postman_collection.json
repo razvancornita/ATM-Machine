@@ -42,7 +42,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{ \n    \"oldPin\": \"4444\",\n    \"newPin\": \"0000\"\n}",
+							"raw": "{ \n    \"oldPin\": \"5275\",\n    \"newPin\": \"0000\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -85,6 +85,60 @@
 					"request": {
 						"method": "DELETE",
 						"header": [],
+						"url": {
+							"raw": "localhost:8090/atmOperation",
+							"host": [
+								"localhost"
+							],
+							"port": "8090",
+							"path": [
+								"atmOperation"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Deposit",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"operationType\": \"DEPOSIT\",\n    \"depositOrWithdrawOperation\": {\n        \"amount\": 100,\n        \"currency\": \"EUR\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8090/atmOperation",
+							"host": [
+								"localhost"
+							],
+							"port": "8090",
+							"path": [
+								"atmOperation"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Withdraw",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"operationType\": \"WITHDRAW\",\n    \"depositOrWithdrawOperation\": {\n        \"amount\": 100,\n        \"currency\": \"USD\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
 							"raw": "localhost:8090/atmOperation",
 							"host": [
@@ -187,6 +241,64 @@
 					"request": {
 						"method": "DELETE",
 						"header": [],
+						"url": {
+							"raw": "https://razvans-atm-simulator.herokuapp.com/atmOperation",
+							"protocol": "https",
+							"host": [
+								"razvans-atm-simulator",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"atmOperation"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Deposit",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"operationType\": \"DEPOSIT\",\n    \"depositOrWithdrawOperation\": {\n        \"amount\": 191,\n        \"currency\": \"RON\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://razvans-atm-simulator.herokuapp.com/atmOperation",
+							"protocol": "https",
+							"host": [
+								"razvans-atm-simulator",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"atmOperation"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Withdraw",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"operationType\": \"WITHDRAW\",\n    \"depositOrWithdrawOperation\": {\n        \"amount\": 191,\n        \"currency\": \"RON\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
 							"raw": "https://razvans-atm-simulator.herokuapp.com/atmOperation",
 							"protocol": "https",
