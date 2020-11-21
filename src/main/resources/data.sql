@@ -12,6 +12,7 @@ CREATE TABLE bank_account (
 CREATE TABLE card (
   id INT AUTO_INCREMENT PRIMARY KEY,
   bank_account_id INT NOT NULL,
+  pin INT NOT NULL,
   FOREIGN KEY (bank_account_id) REFERENCES bank_account(id)
 );
 
@@ -29,24 +30,24 @@ INSERT INTO bank_account (id, owner_first_name, owner_last_name, currency, balan
 INSERT INTO bank_account (id, owner_first_name, owner_last_name, currency, balance) VALUES (17776, 'Ovidiu', 'Sava', 'USD', 287.0);
 INSERT INTO bank_account (id, owner_first_name, owner_last_name, currency, balance) VALUES (20291, 'George', 'Tudor', 'RON', 34287.99);
 
-INSERT INTO card (id, bank_account_id) VALUES (744, 37962);
-INSERT INTO card (id, bank_account_id) VALUES (993, 37962);
-INSERT INTO card (id, bank_account_id) VALUES (433, 90460);
-INSERT INTO card (id, bank_account_id) VALUES (635, 10452);
-INSERT INTO card (id, bank_account_id) VALUES (814, 10452);
-INSERT INTO card (id, bank_account_id) VALUES (860, 86396);
-INSERT INTO card (id, bank_account_id) VALUES (944, 55393);
-INSERT INTO card (id, bank_account_id) VALUES (482, 55393);
-INSERT INTO card (id, bank_account_id) VALUES (920, 55393);
-INSERT INTO card (id, bank_account_id) VALUES (727, 14090);
-INSERT INTO card (id, bank_account_id) VALUES (516, 14090);
-INSERT INTO card (id, bank_account_id) VALUES (191, 86577);
-INSERT INTO card (id, bank_account_id) VALUES (473, 43437);
-INSERT INTO card (id, bank_account_id) VALUES (530, 13973);
-INSERT INTO card (id, bank_account_id) VALUES (689, 13973);
-INSERT INTO card (id, bank_account_id) VALUES (366, 42805);
-INSERT INTO card (id, bank_account_id) VALUES (258, 42805);
-INSERT INTO card (id, bank_account_id) VALUES (614, 17776);
-INSERT INTO card (id, bank_account_id) VALUES (509, 20291);
-INSERT INTO card (id, bank_account_id) VALUES (407, 20291);
-INSERT INTO card (id, bank_account_id) VALUES (238, 20291);
+INSERT INTO card (id, bank_account_id) VALUES (744, 37962, 9757);
+INSERT INTO card (id, bank_account_id) VALUES (993, 37962, 3490);
+INSERT INTO card (id, bank_account_id) VALUES (433, 90460, 3244);
+INSERT INTO card (id, bank_account_id) VALUES (635, 10452, 1215);
+INSERT INTO card (id, bank_account_id) VALUES (814, 10452, 0449);
+INSERT INTO card (id, bank_account_id) VALUES (860, 86396, 6465);
+INSERT INTO card (id, bank_account_id) VALUES (944, 55393, 6079);
+INSERT INTO card (id, bank_account_id) VALUES (482, 55393, 8350);
+INSERT INTO card (id, bank_account_id) VALUES (920, 55393, 4430);
+INSERT INTO card (id, bank_account_id) VALUES (727, 14090, 8658);
+INSERT INTO card (id, bank_account_id) VALUES (516, 14090, 6597);
+INSERT INTO card (id, bank_account_id) VALUES (191, 86577, 5275);
+INSERT INTO card (id, bank_account_id) VALUES (473, 43437, 3348);
+INSERT INTO card (id, bank_account_id) VALUES (530, 13973, 7923);
+INSERT INTO card (id, bank_account_id) VALUES (689, 13973, 7118);
+INSERT INTO card (id, bank_account_id) VALUES (366, 42805, 7351);
+INSERT INTO card (id, bank_account_id) VALUES (258, 42805, 1925);
+INSERT INTO card (id, bank_account_id) VALUES (614, 17776, 8518);
+INSERT INTO card (id, bank_account_id) VALUES (509, 20291, 5877);
+INSERT INTO card (id, bank_account_id) VALUES (407, 20291, 4249);
+INSERT INTO card (id, bank_account_id) VALUES (238, 20291, 4885);
