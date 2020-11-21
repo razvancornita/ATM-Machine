@@ -1,7 +1,9 @@
 package com.atmmachine.controller;
 
+import com.atmmachine.constants.BankConstants;
 import com.atmmachine.model.BankAccount;
 import com.atmmachine.model.request.BankOperationRequest;
+import com.atmmachine.model.request.ChangePinRequest;
 import com.atmmachine.service.BankService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,8 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
-import java.sql.SQLException;
 
 @Controller
 @Slf4j
@@ -26,7 +26,7 @@ public class BankController {
             BankAccount bankAccount = bankService.getAccount(cardId);
             log.debug("completed getBalance request with account = {} for cardId = {}", bankAccount, cardId);
             return ResponseEntity.ok(bankAccount.getBalance() + " " + bankAccount.getCurrency() + " left");
-        } catch (SQLException e) {
+        } catch (Exception e) {
             log.error("failed getBalance for cardId = {}", cardId);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
@@ -43,7 +43,15 @@ public class BankController {
     }
 
     @PutMapping(value = "/atmOperation")
-    public ResponseEntity changePin(@RequestBody BankOperationRequest request) {
-        return null;
+    public ResponseEntity changePin(@RequestBody ChangePinRequest request) {
+        log.debug("received changePin request for cardId = {}", request.getCardId());
+        try {
+            bankService.changePin(request);
+            log.debug("completed changePin request for cardId = {}", request.getCardId());
+            return ResponseEntity.ok(BankConstants.PIN_CHANGED_SUCCESS);
+        } catch (Exception e) {
+            log.error("failed changePin for cardId = {}", request.getCardId());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
     }
 }

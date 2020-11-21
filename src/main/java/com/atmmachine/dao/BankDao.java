@@ -10,6 +10,8 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
+import java.sql.Types;
+
 @Component
 @Slf4j
 public class BankDao {
@@ -26,6 +28,9 @@ public class BankDao {
     @Value("${atmMachine.getAccountId}")
     private String getAccountIdQuery;
 
+    @Value("${atmMachine.changePin}")
+    private String changePinQuery;
+
     public BankAccount getAccount(int bankAccountId) {
         log.debug("getting bank account  for id = {}", bankAccountId);
         try {
@@ -33,8 +38,8 @@ public class BankDao {
             BankAccount bankAccount = jdbcTemplate.queryForObject(getAccountQuery, params, new BeanPropertyRowMapper<>(BankAccount.class));
             log.debug("got bank account = {} for id = {}", bankAccount, bankAccountId);
             return bankAccount;
-        } catch(EmptyResultDataAccessException e) {
-            log.error("no account found for id = {}", bankAccountId, e);
+        } catch (EmptyResultDataAccessException e) {
+            log.error("no account found for id = {}", bankAccountId);
             throw e;
         } catch (Exception e) {
             log.error("error getting bank account for id = {}", bankAccountId, e);
@@ -50,8 +55,8 @@ public class BankDao {
             Card card = jdbcTemplate.queryForObject(getCardQuery, params, new BeanPropertyRowMapper<>(Card.class));
             log.debug("got card = {} for id = {}", card, cardId);
             return card;
-        } catch(EmptyResultDataAccessException e) {
-            log.error("no card found for id = {}", cardId, e);
+        } catch (EmptyResultDataAccessException e) {
+            log.error("no card found for id = {}", cardId);
             throw e;
         } catch (Exception e) {
             log.error("error getting card for id = {}", cardId, e);
@@ -66,11 +71,24 @@ public class BankDao {
             Integer bankAccountId = jdbcTemplate.queryForObject(getAccountIdQuery, params, Integer.class);
             log.debug("got bank account id = {} for cardId = {}", bankAccountId, cardId);
             return bankAccountId;
-        } catch(EmptyResultDataAccessException e) {
-            log.error("no bank account found for cardId = {}", cardId, e);
+        } catch (EmptyResultDataAccessException e) {
+            log.error("no bank account found for cardId = {}", cardId);
             throw e;
-        }catch (Exception e) {
+        } catch (Exception e) {
             log.error("error getting bank account id for cardId = {}", cardId, e);
+            throw e;
+        }
+    }
+
+    public void changeCardPin(int cardId, int oldPin) {
+        log.debug("changing pin for cardId = {}", cardId);
+        try {
+            Object[] params = {oldPin, cardId};
+            int[] types = {Types.INTEGER, Types.INTEGER};
+            jdbcTemplate.update(changePinQuery, params, types);
+            log.debug("changed pin for cardId = {}", cardId);
+        } catch (Exception e) {
+            log.error("error changing pin for cardId = {}", cardId, e);
             throw e;
         }
     }
