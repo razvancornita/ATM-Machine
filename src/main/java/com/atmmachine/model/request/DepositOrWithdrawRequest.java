@@ -5,7 +5,7 @@ import lombok.Getter;
 
 
 @Getter
-public class DepositOrWithdrawOperation {
+public class DepositOrWithdrawRequest {
     private Double amount;
     private Currency currency;
 }

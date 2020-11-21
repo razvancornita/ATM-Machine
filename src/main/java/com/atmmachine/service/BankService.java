@@ -7,9 +7,9 @@ import com.atmmachine.exceptions.CardNotFoundException;
 import com.atmmachine.exceptions.InsufficientFundsException;
 import com.atmmachine.model.BankAccount;
 import com.atmmachine.model.Card;
-import com.atmmachine.model.request.AuthenticateOperation;
+import com.atmmachine.model.request.AuthenticateRequest;
 import com.atmmachine.model.request.BankOperationRequest;
-import com.atmmachine.model.request.DepositOrWithdrawOperation;
+import com.atmmachine.model.request.DepositOrWithdrawRequest;
 import com.atmmachine.model.request.OperationType;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,28 +52,26 @@ public class BankService {
         }
 
         if (request.getOperationType() == OperationType.AUTHENTICATE) {
-            AuthenticateOperation authenticateOperation = request.getAuthenticateOperation();
-            if (authenticateOperation.getCardId() == null || authenticateOperation.getPin() == null) {
+            AuthenticateRequest authenticateRequest = request.getAuthenticateRequest();
+            if (authenticateRequest.getCardId() == null || authenticateRequest.getPin() == null) {
                 throw new IllegalArgumentException(BankConstants.CARD_OR_PIN_NOT_COMPLETED);
             }
         } else {
-            DepositOrWithdrawOperation depositOrWithdrawOperation = request.getDepositOrWithdrawOperation();
-            if (depositOrWithdrawOperation.getAmount() == null) {
+            DepositOrWithdrawRequest depositOrWithdrawRequest = request.getDepositOrWithdrawRequest();
+            if (depositOrWithdrawRequest.getAmount() == null) {
                 throw new IllegalArgumentException(BankConstants.AMOUNT_NOT_COMPLETED);
             }
         }
     }
 
     private String authenticate(BankOperationRequest request) throws FailedLoginException, CardNotFoundException, SQLException, AlreadyAuthenticatedException {
-        AuthenticateOperation authenticateOperation = request.getAuthenticateOperation();
-        Card card = cardService.getCard(authenticateOperation.getCardId());
-        cardService.authenticate(authenticateOperation.getCardId());
-        if (card.getPin().equals(authenticateOperation.getPin())) {
-            return BankConstants.AUTHENTICATED + authenticateOperation.getCardId();
+        AuthenticateRequest authenticateRequest = request.getAuthenticateRequest();
+        Card card = cardService.getCard(authenticateRequest.getCardId());
+        cardService.authenticate(authenticateRequest.getCardId());
+        if (card.getPin().equals(authenticateRequest.getPin())) {
+            return BankConstants.AUTHENTICATED + authenticateRequest.getCardId();
         } else {
             throw new FailedLoginException(BankConstants.WRONG_PIN);
         }
     }
-
-
 }

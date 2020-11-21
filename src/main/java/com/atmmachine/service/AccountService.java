@@ -9,7 +9,7 @@ import com.atmmachine.model.BankAccount;
 import com.atmmachine.model.Card;
 import com.atmmachine.model.Currency;
 import com.atmmachine.model.request.BankOperationRequest;
-import com.atmmachine.model.request.DepositOrWithdrawOperation;
+import com.atmmachine.model.request.DepositOrWithdrawRequest;
 import com.atmmachine.model.request.OperationType;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,29 +36,26 @@ public class AccountService {
     }
 
     public String depositOrWithdraw(BankOperationRequest request, BankAccount bankAccount) throws InsufficientFundsException {
-        DepositOrWithdrawOperation operation = request.getDepositOrWithdrawOperation();
+        DepositOrWithdrawRequest operation = request.getDepositOrWithdrawRequest();
         double amount = calculateAmount(bankAccount, operation);
         double newAmount;
 
         if (request.getOperationType() == OperationType.WITHDRAW) {
             if (bankAccount.getBalance() - amount < 0) throw new InsufficientFundsException();
             newAmount = bankAccount.getBalance() - amount;
-            bankDao.changeAccountBalance(bankAccount.getId(), newAmount);
         } else {
             newAmount = bankAccount.getBalance() + amount;
-            bankDao.changeAccountBalance(bankAccount.getId(), newAmount);
         }
+        bankDao.changeAccountBalance(bankAccount.getId(), newAmount);
         return BankConstants.BALANCE_CHANGED_SUCCESSFULLY + newAmount;
     }
 
-    private double calculateAmount(BankAccount bankAccount, DepositOrWithdrawOperation operation) {
-        double amount;
+    private double calculateAmount(BankAccount bankAccount, DepositOrWithdrawRequest operation) {
         if (operation.getCurrency() == null || bankAccount.getCurrency().equals(operation.getCurrency())) {
-            amount = operation.getAmount();
+            return operation.getAmount();
         } else {
-            amount = calculateAmountFromDifferentCurrency(operation.getAmount(), operation.getCurrency(), bankAccount.getCurrency());
+            return calculateAmountFromDifferentCurrency(operation.getAmount(), operation.getCurrency(), bankAccount.getCurrency());
         }
-        return amount;
     }
 
     private double calculateAmountFromDifferentCurrency(Double amount, Currency operationCurrency, Currency accountCurrency) {

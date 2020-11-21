@@ -23,11 +23,14 @@ public class CardService {
     @Getter
     private Integer cardId;
 
-    @Autowired
     BankDao bankDao;
+    AccountService accountService;
 
     @Autowired
-    AccountService accountService;
+    public CardService(BankDao bankDao, AccountService accountService) {
+        this.bankDao = bankDao;
+        this.accountService = accountService;
+    }
 
     public Card getCard(int cardId) throws CardNotFoundException, SQLException {
         try {
@@ -41,13 +44,12 @@ public class CardService {
 
     public void changePin(ChangePinRequest request, int cardId) throws CardNotFoundException {
         try {
-            Card card = bankDao.getCard(cardId);
             if (request.getNewPin() == null || request.getNewPin().length() != 4
                     || !request.getNewPin().chars().allMatch(Character::isDigit)) {
                 throw new IllegalArgumentException(BankConstants.INVALID_PIN);
             }
 
-            if (!card.getPin().equals(request.getOldPin())) {
+            if (!bankDao.getCard(cardId).getPin().equals(request.getOldPin())) {
                 log.error("wrong pin inserted");
                 throw new IllegalArgumentException(BankConstants.WRONG_PIN);
             } else {
