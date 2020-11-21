@@ -74,6 +74,8 @@ public class BankController {
             String message = bankService.handleOperation(request);
             log.debug("operation {} completed successfully", request.getOperationType());
             return ResponseEntity.ok(message);
+        } catch (ArithmeticException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         } catch (InsufficientFundsException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         } catch (CardNotFoundException e) {

@@ -15,4 +15,5 @@ public class BankConstants {
     public static final String CURRENCY_NOT_SUPPORTED = "The entered currency is not supported. Please enter only EUR/RON/USD";
     public static final String INSUFFICIENT_FUNDS = "Insufficient funds. Please try again";
     public static final String BALANCE_CHANGED_SUCCESSFULLY = "Operation finished successfully. Your new balance is " ;
+    public static final String MONEY_NOT_DIVISIBLE = "Amount not divisible by 50";
 }

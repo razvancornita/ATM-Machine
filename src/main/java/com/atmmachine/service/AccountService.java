@@ -41,6 +41,10 @@ public class AccountService {
 
     public String depositOrWithdraw(BankOperationRequest request, BankAccount bankAccount) throws InsufficientFundsException {
         DepositOrWithdrawRequest operation = request.getDepositOrWithdrawRequest();
+
+        if (operation.getAmount() % 50 != 0) {
+            throw new ArithmeticException(BankConstants.MONEY_NOT_DIVISIBLE);
+        }
         double amount = calculateAmount(bankAccount, operation);
         double newAmount;
 
@@ -59,7 +63,6 @@ public class AccountService {
             log.debug("will withdraw {} {}", operation.getAmount(), operation.getCurrency());
             return operation.getAmount();
         } else {
-
             double amount = calculateAmountFromDifferentCurrency(operation.getAmount(), operation.getCurrency(), bankAccount.getCurrency());
             log.debug("will withdraw {} {}", operation.getAmount(), operation.getCurrency());
             return amount;
@@ -106,6 +109,5 @@ public class AccountService {
             log.error("currency {} is invalid", currency);
             throw new IllegalArgumentException(BankConstants.CURRENCY_NOT_SUPPORTED);
         }
-
     }
 }
