@@ -74,17 +74,12 @@ public class BankController {
             String message = bankService.handleOperation(request);
             log.debug("operation {} completed successfully", request.getOperationType());
             return ResponseEntity.ok(message);
-        } catch (ArithmeticException e) {
+        } catch (ArithmeticException | InsufficientFundsException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-        } catch (InsufficientFundsException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-        } catch (CardNotFoundException e) {
+        } catch (CardNotFoundException | IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (AlreadyAuthenticatedException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
-        } catch (IllegalArgumentException e) {
-            log.error("no operation inserted");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (Exception e) {
             log.error("operation {} failed", request.getOperationType());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
@@ -97,6 +92,7 @@ public class BankController {
         try {
             cardService.checkIfCardIsAuthenticated();
             cardService.changePin(request, cardService.getCardId());
+            cardService.deauthenticate();
             log.debug("completed changePin request");
             return ResponseEntity.ok(BankConstants.PIN_CHANGED_SUCCESS);
         } catch (AccessDeniedException e) {

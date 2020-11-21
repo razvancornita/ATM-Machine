@@ -1,7 +1,7 @@
 package com.atmmachine.constants;
 
 public class BankConstants {
-    public static final String PIN_CHANGED_SUCCESS = "PIN changed successfully";
+    public static final String PIN_CHANGED_SUCCESS = "PIN changed successfully. Please reauthenticate";
     public static final String CARD_NOT_FOUND = "The card with the specified id does not exist";
     public static final String WRONG_PIN = "PIN is incorrect";
     public static final String CARD_NOT_INSERTED = "No card was inserted. Please insert a card first";
