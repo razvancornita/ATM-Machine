@@ -2,6 +2,7 @@ package com.atmmachine.service;
 
 import com.atmmachine.constants.BankConstants;
 import com.atmmachine.dao.BankDao;
+import com.atmmachine.exceptions.AlreadyAuthenticatedException;
 import com.atmmachine.exceptions.CardNotFoundException;
 import com.atmmachine.model.Card;
 import com.atmmachine.model.request.ChangePinRequest;
@@ -60,7 +61,9 @@ public class CardService {
         log.debug("Card with id {} is authenticated", cardId);
     }
 
-    public void authenticateCard(int cardId) {
+    public void authenticateCard(int cardId) throws AlreadyAuthenticatedException {
+        if(this.cardId != null)
+            throw new AlreadyAuthenticatedException();
         this.cardId = cardId;
     }
 }

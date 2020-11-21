@@ -1,6 +1,7 @@
 package com.atmmachine.controller;
 
 import com.atmmachine.constants.BankConstants;
+import com.atmmachine.exceptions.AlreadyAuthenticatedException;
 import com.atmmachine.exceptions.CardNotFoundException;
 import com.atmmachine.model.BankAccount;
 import com.atmmachine.model.request.BankOperationRequest;
@@ -63,7 +64,9 @@ public class BankController {
             return ResponseEntity.ok(message);
         } catch (CardNotFoundException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        } catch (IllegalArgumentException e) {
+        } catch(AlreadyAuthenticatedException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+        } catch(IllegalArgumentException e) {
             log.error("no operation inserted");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (Exception e) {

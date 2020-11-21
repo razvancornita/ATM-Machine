@@ -2,6 +2,7 @@ package com.atmmachine.service;
 
 import com.atmmachine.constants.BankConstants;
 import com.atmmachine.dao.BankDao;
+import com.atmmachine.exceptions.AlreadyAuthenticatedException;
 import com.atmmachine.exceptions.CardNotFoundException;
 import com.atmmachine.model.Card;
 import com.atmmachine.model.request.AuthenticateOperation;
@@ -26,7 +27,7 @@ public class BankService {
     CardService cardService;
 
 
-    public String handleOperation(BankOperationRequest request) throws CardNotFoundException, FailedLoginException, SQLException {
+    public String handleOperation(BankOperationRequest request) throws CardNotFoundException, FailedLoginException, SQLException, AlreadyAuthenticatedException {
         validateRequest(request);
 
         switch (request.getOperationType()) {
@@ -58,7 +59,7 @@ public class BankService {
         }
     }
 
-    private String authenticate(BankOperationRequest request) throws FailedLoginException, CardNotFoundException, SQLException {
+    private String authenticate(BankOperationRequest request) throws FailedLoginException, CardNotFoundException, SQLException, AlreadyAuthenticatedException {
         AuthenticateOperation authenticateOperation = request.getAuthenticateOperation();
 
         Card card = cardService.getCard(authenticateOperation.getCardId());
