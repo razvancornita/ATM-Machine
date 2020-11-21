@@ -9,32 +9,13 @@
 			"name": "Local",
 			"item": [
 				{
-					"name": "GetBalance",
+					"name": "Authenticate",
 					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "localhost:8090/atmOperation/1",
-							"host": [
-								"localhost"
-							],
-							"port": "8090",
-							"path": [
-								"atmOperation",
-								"1"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "ChangePin",
-					"request": {
-						"method": "PUT",
+						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{ \n    \"cardId\": 191,\n    \"oldPin\": 5275,\n    \"newPin\": 3333\n}",
+							"raw": "{\n    \"operationType\": \"AUTHENTICATE\",\n    \"authenticateOperation\": {\n        \"cardId\": 1,\n        \"pin\": 1234\n    }\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -53,6 +34,52 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "ChangePin",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \n    \"oldPin\": 5275,\n    \"newPin\": 3333\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8090/atmOperation",
+							"host": [
+								"localhost"
+							],
+							"port": "8090",
+							"path": [
+								"atmOperation"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetBalance",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8090/atmOperation/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8090",
+							"path": [
+								"atmOperation",
+								"1"
+							]
+						}
+					},
+					"response": []
 				}
 			],
 			"protocolProfileBehavior": {}
@@ -61,21 +88,27 @@
 			"name": "Heroku",
 			"item": [
 				{
-					"name": "GetBalance",
+					"name": "Authenticate",
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"operationType\": \"AUTHENTICATE\",\n    \"authenticateOperation\": {\n        \"cardId\": 1,\n        \"pin\": 1234\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "https://razvans-atm-simulator.herokuapp.com/atmOperation/1",
-							"protocol": "https",
+							"raw": "localhost:8090/atmOperation",
 							"host": [
-								"razvans-atm-simulator",
-								"herokuapp",
-								"com"
+								"localhost"
 							],
+							"port": "8090",
 							"path": [
-								"atmOperation",
-								"1"
+								"atmOperation"
 							]
 						}
 					},
@@ -88,7 +121,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{ \n    \"cardId\": 191,\n    \"oldPin\": 5275,\n    \"newPin\": 3333\n}",
+							"raw": "{ \n    \"oldPin\": 5275,\n    \"newPin\": 3333\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -105,6 +138,27 @@
 							],
 							"path": [
 								"atmOperation"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetBalance",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://razvans-atm-simulator.herokuapp.com/atmOperation/1",
+							"protocol": "https",
+							"host": [
+								"razvans-atm-simulator",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"atmOperation",
+								"1"
 							]
 						}
 					},
