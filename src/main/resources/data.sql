@@ -6,7 +6,7 @@ CREATE TABLE bank_account (
   owner_first_name VARCHAR(40) NOT NULL,
   owner_last_name VARCHAR(40) NOT NULL,
   currency VARCHAR(5) NOT NULL,
-  balance INT DEFAULT 0
+  balance DOUBLE DEFAULT 0
 );
 
 CREATE TABLE card (

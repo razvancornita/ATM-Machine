@@ -26,11 +26,11 @@ public class BankDao {
     private String getAccountIdQuery;
 
 
-    public BigDecimal getAccountBalance(int bankAccountId) {
+    public Double getAccountBalance(int bankAccountId) {
         log.debug("getting bank account balance for id = {}", bankAccountId);
         try {
             Object[] params = {bankAccountId};
-            BigDecimal balance = jdbcTemplate.queryForObject(getBalanceQuery, params, BigDecimal.class);
+            Double balance = jdbcTemplate.queryForObject(getBalanceQuery, params, Double.class);
             log.debug("got bank account balance = {} for id = {}", balance, bankAccountId);
             return balance;
         } catch (Exception e) {

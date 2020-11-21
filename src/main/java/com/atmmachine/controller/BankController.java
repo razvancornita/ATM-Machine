@@ -23,7 +23,7 @@ public class BankController {
     public ResponseEntity<String> getBalance(@PathVariable("cardId") Integer cardId) {
         log.debug("received getBalance request for cardId = {}", cardId);
         try {
-            BigDecimal accountBalance = bankService.getAccountBalance(cardId);
+            Double accountBalance = bankService.getAccountBalance(cardId);
             String accountCurrency = bankService.getAccountCurrency(cardId);
             log.debug("completed getBalance request with balance = {} and currency = {} for cardId = {}", accountBalance, accountCurrency, cardId);
             return ResponseEntity.ok(accountBalance + " " + accountCurrency + " left");

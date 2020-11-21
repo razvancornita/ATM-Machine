@@ -15,7 +15,7 @@ public class BankService {
     @Autowired
     BankDao bankDao;
 
-    public BigDecimal getAccountBalance(int cardId) throws SQLException {
+    public Double getAccountBalance(int cardId) throws SQLException {
         try {
             int bankAccountId = getBankAccountIdForCardId(cardId);
             return bankDao.getAccountBalance(bankAccountId);
@@ -24,7 +24,7 @@ public class BankService {
         }
     }
 
-    public String getAccountCurrency(Integer cardId) throws SQLException {
+    public String getAccountCurrency(int cardId) throws SQLException {
         try {
             int bankAccountId = getBankAccountIdForCardId(cardId);
             return bankDao.getAccountCurrency(bankAccountId);
@@ -37,7 +37,7 @@ public class BankService {
         try {
             return bankDao.getAccountIdForCardId(cardId);
         } catch (EmptyResultDataAccessException e) {
-            throw new SQLException("Specified card is not associated with a bank account");
+            throw new SQLException(BankConstants.ACCOUNT_NOT_FOUND);
         } catch (Exception e) {
             throw new SQLException(BankConstants.ERR_INTERNAL);
         }
