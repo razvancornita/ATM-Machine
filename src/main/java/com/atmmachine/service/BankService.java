@@ -2,6 +2,7 @@ package com.atmmachine.service;
 
 import com.atmmachine.constants.BankConstants;
 import com.atmmachine.dao.BankDao;
+import com.atmmachine.model.BankAccount;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
@@ -15,21 +16,13 @@ public class BankService {
     @Autowired
     BankDao bankDao;
 
-    public Double getAccountBalance(int cardId) throws SQLException {
+
+    public BankAccount getAccount(int cardId) throws SQLException {
         try {
             int bankAccountId = getBankAccountIdForCardId(cardId);
-            return bankDao.getAccountBalance(bankAccountId);
+            return bankDao.getAccount(bankAccountId);
         }  catch (Exception e) {
             throw new SQLException(e.getMessage());
-        }
-    }
-
-    public String getAccountCurrency(int cardId) throws SQLException {
-        try {
-            int bankAccountId = getBankAccountIdForCardId(cardId);
-            return bankDao.getAccountCurrency(bankAccountId);
-        }  catch (Exception e) {
-            throw new SQLException(BankConstants.ERR_INTERNAL);
         }
     }
 

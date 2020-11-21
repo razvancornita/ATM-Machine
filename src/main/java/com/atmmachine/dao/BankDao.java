@@ -1,9 +1,12 @@
 package com.atmmachine.dao;
 
+import com.atmmachine.model.BankAccount;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
@@ -16,40 +19,24 @@ public class BankDao {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    @Value("${atmMachine.getBalance}")
-    private String getBalanceQuery;
-
-    @Value("${atmMachine.getCurrency}")
-    private String getCurrencyQuery;
+    @Value("${atmMachine.getAccount}")
+    private String getAccountQuery;
 
     @Value("${atmMachine.getAccountId}")
     private String getAccountIdQuery;
 
-
-    public Double getAccountBalance(int bankAccountId) {
-        log.debug("getting bank account balance for id = {}", bankAccountId);
+    public BankAccount getAccount(int bankAccountId) {
+        log.debug("getting bank account  for id = {}", bankAccountId);
         try {
             Object[] params = {bankAccountId};
-            Double balance = jdbcTemplate.queryForObject(getBalanceQuery, params, Double.class);
-            log.debug("got bank account balance = {} for id = {}", balance, bankAccountId);
-            return balance;
+            BankAccount bankAccount = jdbcTemplate.queryForObject(getAccountQuery, params, new BeanPropertyRowMapper<>(BankAccount.class));
+            log.debug("got bank account = {} for id = {}", bankAccount, bankAccountId);
+            return bankAccount;
         } catch (Exception e) {
-            log.error("error getting bank account balance for id = {}", bankAccountId, e);
+            log.error("error getting bank account for id = {}", bankAccountId, e);
             throw e;
         }
-    }
 
-    public String getAccountCurrency(int bankAccountId) {
-        log.debug("getting bank account currency for id = {}", bankAccountId);
-        try {
-            Object[] params = {bankAccountId};
-            String currency = jdbcTemplate.queryForObject(getCurrencyQuery, params, String.class);
-            log.debug("got bank account currency = {} for id = {}", currency, bankAccountId);
-            return currency;
-        } catch (Exception e) {
-            log.error("error getting bank account currency for id = {}", bankAccountId, e);
-            throw e;
-        }
     }
 
     public int getAccountIdForCardId(int cardId) {
