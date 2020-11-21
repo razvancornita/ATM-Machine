@@ -69,37 +69,43 @@ public class AccountService {
     private double calculateAmountFromDifferentCurrency(Double amount, Currency operationCurrency, Currency accountCurrency) {
         validateCurrency(operationCurrency);
         validateCurrency(accountCurrency);
+        double newAmount = 0;
 
         switch (operationCurrency) {
             case RON:
                 if (accountCurrency.equals(Currency.EUR)) {
-                    return amount * 0.21;
+                    newAmount = amount * 0.21;
                 } else if (accountCurrency.equals(Currency.USD)) {
-                    return amount * 0.24;
+                    newAmount = amount * 0.24;
                 }
                 break;
             case EUR:
                 if (accountCurrency.equals(Currency.RON)) {
-                    return amount * 4.87;
+                    newAmount = amount * 4.87;
                 } else if (accountCurrency.equals(Currency.USD)) {
-                    return amount * 1.19;
+                    newAmount = amount * 1.19;
                 }
                 break;
             case USD:
                 if (accountCurrency.equals(Currency.RON)) {
-                    return amount * 4.11;
+                    newAmount = amount * 4.11;
                 } else if (accountCurrency.equals(Currency.EUR)) {
-                    return amount * 0.84;
+                    newAmount = amount * 0.84;
                 }
                 break;
             default:
                 throw new IllegalArgumentException(BankConstants.CURRENCY_NOT_SUPPORTED);
         }
-        return 0;
+
+        log.debug("{} is {} {}", operationCurrency, accountCurrency, newAmount);
+        return newAmount;
     }
 
     private void validateCurrency(Currency currency) {
-        if (currency != Currency.EUR && currency != Currency.RON && currency != Currency.USD)
+        if (currency != Currency.EUR && currency != Currency.RON && currency != Currency.USD) {
+            log.error("currency {} is invalid", currency);
             throw new IllegalArgumentException(BankConstants.CURRENCY_NOT_SUPPORTED);
+        }
+
     }
 }
