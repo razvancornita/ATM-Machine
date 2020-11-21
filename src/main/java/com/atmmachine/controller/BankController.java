@@ -44,13 +44,13 @@ public class BankController {
 
     @PutMapping(value = "/atmOperation")
     public ResponseEntity changePin(@RequestBody ChangePinRequest request) {
-        log.debug("received changePin request for cardId = {}", request.getCardId());
+        log.debug("received changePin request");
         try {
             bankService.changePin(request);
-            log.debug("completed changePin request for cardId = {}", request.getCardId());
+            log.debug("completed changePin request");
             return ResponseEntity.ok(BankConstants.PIN_CHANGED_SUCCESS);
         } catch (Exception e) {
-            log.error("failed changePin for cardId = {}", request.getCardId());
+            log.error("failed changePin");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
