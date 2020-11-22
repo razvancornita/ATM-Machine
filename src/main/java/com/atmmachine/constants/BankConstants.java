@@ -1,6 +1,9 @@
 package com.atmmachine.constants;
 
 public class BankConstants {
+    private BankConstants() {
+    }
+
     public static final String PIN_CHANGED_SUCCESS = "PIN changed successfully. Please reauthenticate";
     public static final String CARD_NOT_FOUND = "The card with the specified id does not exist";
     public static final String WRONG_PIN = "PIN is incorrect";
@@ -14,6 +17,6 @@ public class BankConstants {
     public static final String DEAUTHENTICATED = "You have successfully deauthenticated";
     public static final String CURRENCY_NOT_SUPPORTED = "The entered currency is not supported. Please enter only EUR/RON/USD";
     public static final String INSUFFICIENT_FUNDS = "Insufficient funds. Please try again";
-    public static final String BALANCE_CHANGED_SUCCESSFULLY = "Operation finished successfully. Your new balance is " ;
+    public static final String BALANCE_CHANGED_SUCCESSFULLY = "Operation finished successfully. Your new balance is ";
     public static final String MONEY_NOT_DIVISIBLE = "Amount not divisible by 50";
 }
