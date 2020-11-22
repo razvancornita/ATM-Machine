@@ -2,6 +2,7 @@ package com.atmmachine.service;
 
 import com.atmmachine.dao.BankDao;
 import com.atmmachine.exceptions.CardNotFoundException;
+import com.atmmachine.exceptions.InsufficientFundsException;
 import com.atmmachine.model.BankAccount;
 import com.atmmachine.model.Currency;
 import com.atmmachine.model.request.BankOperationRequest;
@@ -15,6 +16,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
 public class AccountServiceTest {
@@ -54,12 +56,64 @@ public class AccountServiceTest {
                 .isThrownBy(() -> accountService.changeAccountBalance(request, bankAccount));
     }
 
-
     @Test
-    public void testNewAmount() {
-        BankOperationRequest request = RequestGenerator.generateDepositRequest(300);
+    public void testDepositSameCurrency() throws InsufficientFundsException {
+        BankOperationRequest bankOperationRequest = RequestGenerator.generateDepositRequest(300.00);
         BankAccount bankAccount = new BankAccount();
         bankAccount.setCurrency(Currency.EUR);
-        bankAccount.setBalance(195.5);
+        bankAccount.setBalance(195.00);
+        double newAmount = 495;
+
+
+        accountService.changeAccountBalance(bankOperationRequest, bankAccount);
+        verify(bankDao).changeAccountBalance(eq(bankAccount.getId()), eq(newAmount));
+    }
+
+    @Test
+    public void testDepositDifferentCurrency() throws InsufficientFundsException {
+        BankOperationRequest bankOperationRequest = RequestGenerator.generateDepositRequest(300.00);
+        BankAccount bankAccount = new BankAccount();
+        bankAccount.setCurrency(Currency.RON);
+        bankAccount.setBalance(195.00);
+        double newAmount = 1656.00;
+
+        accountService.changeAccountBalance(bankOperationRequest, bankAccount);
+        verify(bankDao).changeAccountBalance(eq(bankAccount.getId()), eq(newAmount));
+    }
+
+    @Test
+    public void testWithdrawSameCurrency() throws InsufficientFundsException {
+        BankOperationRequest bankOperationRequest = RequestGenerator.generateWithdrawRequest(100.00);
+        BankAccount bankAccount = new BankAccount();
+        bankAccount.setCurrency(Currency.EUR);
+        bankAccount.setBalance(200.00);
+        double newAmount = 100;
+
+        accountService.changeAccountBalance(bankOperationRequest, bankAccount);
+        verify(bankDao).changeAccountBalance(eq(bankAccount.getId()), eq(newAmount));
+    }
+
+    @Test
+    public void testWithdrawDifferentCurrency() throws InsufficientFundsException {
+        BankOperationRequest bankOperationRequest = RequestGenerator.generateDepositRequest(100.00);
+        BankAccount bankAccount = new BankAccount();
+        bankAccount.setCurrency(Currency.RON);
+        bankAccount.setBalance(600.00);
+        double newAmount = 1087.00;
+
+        accountService.changeAccountBalance(bankOperationRequest, bankAccount);
+        verify(bankDao).changeAccountBalance(eq(bankAccount.getId()), eq(newAmount));
+    }
+
+    @Test(expected = InsufficientFundsException.class)
+    public void testWithdrawInsufficientFunds() throws InsufficientFundsException {
+        BankOperationRequest bankOperationRequest = RequestGenerator.generateWithdrawRequest(300.00);
+        BankAccount bankAccount = new BankAccount();
+        bankAccount.setCurrency(Currency.EUR);
+        bankAccount.setBalance(200.00);
+        double newAmount = 100;
+
+        accountService.changeAccountBalance(bankOperationRequest, bankAccount);
+        verify(bankDao).changeAccountBalance(eq(bankAccount.getId()), eq(newAmount));
     }
 }

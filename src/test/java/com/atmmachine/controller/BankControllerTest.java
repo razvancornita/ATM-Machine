@@ -159,7 +159,7 @@ class BankControllerTest {
 
     @Test
     void testDeposit() throws Exception {
-        BankOperationRequest withdrawOperationRequest = RequestGenerator.generateDepositRequest();
+        BankOperationRequest withdrawOperationRequest = RequestGenerator.generateDepositRequest(200);
 
         String depositJson = objectWriter.writeValueAsString(withdrawOperationRequest);
         this.mockMvc
