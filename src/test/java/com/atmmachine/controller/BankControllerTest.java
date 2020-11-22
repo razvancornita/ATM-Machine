@@ -1,12 +1,16 @@
 package com.atmmachine.controller;
 
 import com.atmmachine.constants.BankConstants;
+import com.atmmachine.exceptions.AlreadyAuthenticatedException;
+import com.atmmachine.exceptions.InsufficientFundsException;
 import com.atmmachine.model.BankAccount;
 import com.atmmachine.model.Currency;
+import com.atmmachine.model.request.BankOperationRequest;
 import com.atmmachine.model.request.ChangePinRequest;
 import com.atmmachine.service.AccountService;
 import com.atmmachine.service.BankService;
 import com.atmmachine.service.CardService;
+import com.atmmachine.util.RequestGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import org.junit.jupiter.api.Test;
@@ -16,7 +20,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.nio.charset.StandardCharsets;
 import java.nio.file.AccessDeniedException;
 
 import static org.mockito.ArgumentMatchers.eq;
@@ -28,11 +31,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(BankController.class)
 class BankControllerTest {
-    public static final MediaType APPLICATION_JSON_UTF8 = new MediaType(MediaType.APPLICATION_JSON.getType(),
-            MediaType.APPLICATION_JSON.getSubtype(), StandardCharsets.UTF_8);
+    public static final MediaType APPLICATION_JSON_UTF8 = RequestGenerator.generateJsonMediaType();
     private static final int TEST_CARD_ID = 4657321;
     private static final int CARD_SERVICE_ID = 0;
-    private static final ChangePinRequest changePinRequest = new ChangePinRequest("3333", "4444");
+
+    private static final ChangePinRequest changePinRequest = RequestGenerator.generateChangePinRequest();
 
     @Autowired
     private MockMvc mockMvc;
@@ -70,8 +73,7 @@ class BankControllerTest {
 
     @Test
     void testGetBalanceReturnsUnauthorized() throws Exception {
-        doThrow(new AccessDeniedException(BankConstants.CARD_NOT_INSERTED))
-                .when(cardService).checkIfCardIsAuthenticated();
+        doThrow(new AccessDeniedException(BankConstants.CARD_NOT_INSERTED)).when(cardService).checkIfCardIsAuthenticated();
 
         this.mockMvc
                 .perform(get("/atmOperation"))
@@ -94,8 +96,7 @@ class BankControllerTest {
 
     @Test
     void testDeauthenticateUnauthorized() throws Exception {
-        doThrow(new AccessDeniedException(BankConstants.CARD_NOT_INSERTED))
-                .when(cardService).checkIfCardIsAuthenticated();
+        doThrow(new AccessDeniedException(BankConstants.CARD_NOT_INSERTED)).when(cardService).checkIfCardIsAuthenticated();
 
         this.mockMvc
                 .perform(delete("/atmOperation"))
@@ -110,9 +111,9 @@ class BankControllerTest {
         doNothing().when(cardService).changePin(changePinRequest, CARD_SERVICE_ID);
         doNothing().when(cardService).deauthenticate();
 
-        String changePinJSON = objectWriter.writeValueAsString(changePinRequest);
+        String changePinJson = objectWriter.writeValueAsString(changePinRequest);
         this.mockMvc
-                .perform(put("/atmOperation").contentType(APPLICATION_JSON_UTF8).content(changePinJSON))
+                .perform(put("/atmOperation").contentType(APPLICATION_JSON_UTF8).content(changePinJson))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(BankConstants.PIN_CHANGED_SUCCESS));
@@ -121,12 +122,11 @@ class BankControllerTest {
     @Test
     void testChangePinWrongPin() throws Exception {
         doNothing().when(cardService).checkIfCardIsAuthenticated();
-        doThrow(new IllegalArgumentException(BankConstants.WRONG_PIN))
-                .when(cardService).changePin(changePinRequest, CARD_SERVICE_ID);
+        doThrow(new IllegalArgumentException(BankConstants.WRONG_PIN)).when(cardService).changePin(changePinRequest, CARD_SERVICE_ID);
 
-        String changePinJSON = objectWriter.writeValueAsString(changePinRequest);
+        String changePinJson = objectWriter.writeValueAsString(changePinRequest);
         this.mockMvc
-                .perform(put("/atmOperation").contentType(APPLICATION_JSON_UTF8).content(changePinJSON))
+                .perform(put("/atmOperation").contentType(APPLICATION_JSON_UTF8).content(changePinJson))
                 .andDo(print())
                 .andExpect(status().isForbidden())
                 .andExpect(content().string(BankConstants.WRONG_PIN));
@@ -134,14 +134,63 @@ class BankControllerTest {
 
     @Test
     void testChangePinUnauthorized() throws Exception {
-        doThrow(new AccessDeniedException(BankConstants.CARD_NOT_INSERTED))
-                .when(cardService).checkIfCardIsAuthenticated();
+        doThrow(new AccessDeniedException(BankConstants.CARD_NOT_INSERTED)).when(cardService).checkIfCardIsAuthenticated();
 
-        String changePinJSON = objectWriter.writeValueAsString(changePinRequest);
+        String changePinJson = objectWriter.writeValueAsString(changePinRequest);
         this.mockMvc
-                .perform(put("/atmOperation").contentType(APPLICATION_JSON_UTF8).content(changePinJSON))
+                .perform(put("/atmOperation").contentType(APPLICATION_JSON_UTF8).content(changePinJson))
                 .andDo(print())
                 .andExpect(status().isUnauthorized())
                 .andExpect(content().string(BankConstants.CARD_NOT_INSERTED));
+    }
+
+    @Test
+    void testWithdrawInsufficientFunds() throws Exception {
+        BankOperationRequest withdrawOperationRequest = RequestGenerator.generateWithdrawRequest(300.00);
+        doThrow(new InsufficientFundsException()).when(bankService).handleOperation(withdrawOperationRequest);
+
+        String withdrawJSON = objectWriter.writeValueAsString(withdrawOperationRequest);
+        this.mockMvc
+                .perform(post("/atmOperation").contentType(APPLICATION_JSON_UTF8).content(withdrawJSON))
+                .andDo(print())
+                .andExpect(status().isInternalServerError())
+                .andExpect(content().string(BankConstants.INSUFFICIENT_FUNDS));
+    }
+
+    @Test
+    void testDeposit() throws Exception {
+        BankOperationRequest withdrawOperationRequest = RequestGenerator.generateDepositRequest();
+
+        String depositJson = objectWriter.writeValueAsString(withdrawOperationRequest);
+        this.mockMvc
+                .perform(post("/atmOperation").contentType(APPLICATION_JSON_UTF8).content(depositJson))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void testAlreadyAuthenticated() throws Exception {
+        BankOperationRequest authenticateRequest = RequestGenerator.generateAuthenticateRequest();
+        doThrow(new AlreadyAuthenticatedException(1)).when(bankService).handleOperation(authenticateRequest);
+
+        String authenticateJson = objectWriter.writeValueAsString(authenticateRequest);
+        this.mockMvc
+                .perform(post("/atmOperation").contentType(APPLICATION_JSON_UTF8).content(authenticateJson))
+                .andDo(print())
+                .andExpect(status().isConflict())
+                .andExpect(content().string(BankConstants.ALREADY_AUTHENTICATED + 1));
+    }
+
+    @Test
+    void testWithdrawNotDivisibleAmount() throws Exception {
+        BankOperationRequest withdrawOperationRequest = RequestGenerator.generateWithdrawRequest(307.00);
+        doThrow(new ArithmeticException(BankConstants.MONEY_NOT_DIVISIBLE)).when(bankService).handleOperation(withdrawOperationRequest);
+
+        String withdrawJSON = objectWriter.writeValueAsString(withdrawOperationRequest);
+        this.mockMvc
+                .perform(post("/atmOperation").contentType(APPLICATION_JSON_UTF8).content(withdrawJSON))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(BankConstants.MONEY_NOT_DIVISIBLE));
     }
 }

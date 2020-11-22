@@ -74,11 +74,11 @@ public class BankController {
             String message = bankService.handleOperation(request);
             log.debug("operation {} completed successfully", request.getOperationType());
             return ResponseEntity.ok(message);
-        } catch (ArithmeticException | InsufficientFundsException e) {
+        } catch (InsufficientFundsException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         } catch (CardNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException | ArithmeticException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (AlreadyAuthenticatedException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
