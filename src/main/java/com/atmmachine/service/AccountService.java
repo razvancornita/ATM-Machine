@@ -39,7 +39,7 @@ public class AccountService {
         }
     }
 
-    public String depositOrWithdraw(BankOperationRequest request, BankAccount bankAccount) throws InsufficientFundsException {
+    public String changeAccountBalance(BankOperationRequest request, BankAccount bankAccount) throws InsufficientFundsException {
         DepositOrWithdrawRequest operation = request.getDepositOrWithdrawRequest();
 
         if (operation.getAmount() % 50 != 0) {
@@ -59,7 +59,7 @@ public class AccountService {
     }
 
     private double calculateAmount(BankAccount bankAccount, DepositOrWithdrawRequest operation) {
-        if (operation.getCurrency() == null || bankAccount.getCurrency().equals(operation.getCurrency())) {
+        if (bankAccount.getCurrency().equals(operation.getCurrency())) {
             log.debug("will withdraw {} {}", operation.getAmount(), operation.getCurrency());
             return operation.getAmount();
         } else {

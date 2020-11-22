@@ -40,7 +40,7 @@ public class BankService {
             case DEPOSIT, WITHDRAW -> {
                 cardService.checkIfCardIsNotAuthenticated();
                 BankAccount bankAccount = accountService.getAccountByCardId(cardService.getCardId());
-                yield accountService.depositOrWithdraw(request, bankAccount);
+                yield accountService.changeAccountBalance(request, bankAccount);
             }
         };
     }
