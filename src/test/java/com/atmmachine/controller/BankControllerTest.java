@@ -15,8 +15,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.nio.file.AccessDeniedException;
 
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -42,6 +42,7 @@ class BankControllerTest {
     @Test
     void testGetBalanceHappyFlow() throws Exception {
         when(cardService.getCardId()).thenReturn(TEST_CARD_ID);
+        doNothing().when(cardService).checkIfCardIsAuthenticated();
 
         BankAccount bankAccount = new BankAccount();
         bankAccount.setBalance(0.00);
@@ -66,6 +67,29 @@ class BankControllerTest {
 
         this.mockMvc
                 .perform(get("/atmOperation"))
+                .andDo(print())
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void testDeauthenticateHappyFlow() throws Exception {
+        doNothing().when(cardService).checkIfCardIsAuthenticated();
+        doNothing().when(cardService).deauthenticate();
+
+        this.mockMvc
+                .perform(delete("/atmOperation"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(BankConstants.DEAUTHENTICATED));
+    }
+
+    @Test
+    void testDeauthenticateUnauthorized() throws Exception {
+        doThrow(new AccessDeniedException(BankConstants.CARD_NOT_INSERTED))
+                .when(cardService).checkIfCardIsAuthenticated();
+
+        this.mockMvc
+                .perform(delete("/atmOperation"))
                 .andDo(print())
                 .andExpect(status().isUnauthorized());
     }
