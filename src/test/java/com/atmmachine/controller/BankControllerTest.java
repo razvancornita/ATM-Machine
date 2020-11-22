@@ -108,7 +108,7 @@ class BankControllerTest {
     @Test
     void testChangePinHappyFlow() throws Exception {
         doNothing().when(cardService).checkIfCardIsNotAuthenticated();
-        doNothing().when(cardService).changePin(changePinRequest, CARD_SERVICE_ID);
+        doNothing().when(cardService).changePin(changePinRequest);
         doNothing().when(cardService).deauthenticate();
 
         String changePinJson = objectWriter.writeValueAsString(changePinRequest);
@@ -122,7 +122,7 @@ class BankControllerTest {
     @Test
     void testChangePinWrongPin() throws Exception {
         doNothing().when(cardService).checkIfCardIsNotAuthenticated();
-        doThrow(new IllegalArgumentException(BankConstants.WRONG_PIN)).when(cardService).changePin(changePinRequest, CARD_SERVICE_ID);
+        doThrow(new IllegalArgumentException(BankConstants.WRONG_PIN)).when(cardService).changePin(changePinRequest);
 
         String changePinJson = objectWriter.writeValueAsString(changePinRequest);
         this.mockMvc

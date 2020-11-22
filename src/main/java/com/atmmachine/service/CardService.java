@@ -44,7 +44,7 @@ public class CardService {
         }
     }
 
-    public void changePin(ChangePinRequest request, int cardId) throws CardNotFoundException {
+    public void changePin(ChangePinRequest request) throws CardNotFoundException {
         try {
             if (request.getNewPin() == null || request.getNewPin().length() != 4
                     || !request.getNewPin().chars().allMatch(Character::isDigit)) {

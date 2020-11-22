@@ -93,7 +93,7 @@ public class BankController {
         log.debug("received changePin request");
         try {
             cardService.checkIfCardIsNotAuthenticated();
-            cardService.changePin(request, cardService.getCardId());
+            cardService.changePin(request);
             cardService.deauthenticate();
             log.debug("completed changePin request");
             return ResponseEntity.ok(BankConstants.PIN_CHANGED_SUCCESS);

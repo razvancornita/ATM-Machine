@@ -57,7 +57,7 @@ public class AccountServiceTest {
         doThrow(new EmptyResultDataAccessException(1)).when(bankDao).getCard(eq(TEST_CARD_ID));
 
         assertThatExceptionOfType(CardNotFoundException.class)
-                .isThrownBy(() -> cardService.changePin(changePinRequest, TEST_CARD_ID));
+                .isThrownBy(() -> cardService.changePin(changePinRequest));
     }
 
     @Test
@@ -66,12 +66,12 @@ public class AccountServiceTest {
         changePinRequest.setNewPin(NEW_PIN_INVALID_LENGTH);
 
         assertThatExceptionOfType(IllegalArgumentException.class)
-                .isThrownBy(() -> cardService.changePin(changePinRequest, TEST_CARD_ID));
+                .isThrownBy(() -> cardService.changePin(changePinRequest));
 
         changePinRequest.setNewPin(NEW_PIN_INVALID_CHARS);
 
         assertThatExceptionOfType(IllegalArgumentException.class)
-                .isThrownBy(() -> cardService.changePin(changePinRequest, TEST_CARD_ID));
+                .isThrownBy(() -> cardService.changePin(changePinRequest));
     }
 
     @Test
@@ -89,7 +89,7 @@ public class AccountServiceTest {
         when(bankDao.getCard(eq(TEST_CARD_ID))).thenReturn(card);
 
         assertThatExceptionOfType(IllegalArgumentException.class)
-                .isThrownBy(() -> cardService.changePin(changePinRequest, TEST_CARD_ID));
+                .isThrownBy(() -> cardService.changePin(changePinRequest));
     }
 
     @Test
@@ -97,7 +97,7 @@ public class AccountServiceTest {
         cardService.setCardId(null);
 
         assertThatExceptionOfType(AccessDeniedException.class)
-                .isThrownBy(() -> cardService.checkIfCardIsAuthenticated());
+                .isThrownBy(() -> cardService.checkIfCardIsNotAuthenticated());
     }
 
     @Test
@@ -106,14 +106,14 @@ public class AccountServiceTest {
         cardService.deauthenticate();
 
         assertThatExceptionOfType(AccessDeniedException.class)
-                .isThrownBy(() -> cardService.checkIfCardIsAuthenticated());
+                .isThrownBy(() -> cardService.checkIfCardIsNotAuthenticated());
     }
 
     @Test
     public void testDeauthenticate() {
         cardService.setCardId(TEST_CARD_ID);
         cardService.deauthenticate();
-        assertThat(cardService.getCardId() == null);
+        assertThat(cardService.getCardId()).isNull();
     }
 
     @Test
@@ -126,8 +126,8 @@ public class AccountServiceTest {
 
     @Test
     public void testAuthenticate() throws AlreadyAuthenticatedException {
-        assertThat(cardService.getCardId() == null);
+        assertThat(cardService.getCardId()).isNull();
         cardService.authenticate(TEST_CARD_ID);
-        assertThat(cardService.getCardId() == TEST_CARD_ID);
+        assertThat(cardService.getCardId()).isEqualTo(TEST_CARD_ID);
     }
 }
