@@ -43,7 +43,7 @@ public class BankController {
             log.debug("completed getBalance request with account = {} for cardId = {}", bankAccount, cardService.getCardId());
             return ResponseEntity.ok(bankAccount.getBalance() + " " + bankAccount.getCurrency() + " left");
         } catch (AccessDeniedException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(BankConstants.CARD_NOT_INSERTED);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
         } catch (Exception e) {
             log.error("failed getBalance");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
@@ -59,7 +59,7 @@ public class BankController {
             log.debug("finished deauthenticating");
             return ResponseEntity.ok(BankConstants.DEAUTHENTICATED);
         } catch (AccessDeniedException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(BankConstants.CARD_NOT_INSERTED);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
         } catch (Exception e) {
             log.error("failed deauthenticating");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());

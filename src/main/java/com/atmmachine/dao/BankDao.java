@@ -17,8 +17,12 @@ import java.sql.Types;
 @Slf4j
 public class BankDao {
 
+    private final JdbcTemplate jdbcTemplate;
+
     @Autowired
-    private JdbcTemplate jdbcTemplate;
+    public BankDao(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
 
     @Value("${atmMachine.getAccount}")
     private String getAccountQuery;
