@@ -30,4 +30,8 @@ public class RequestGenerator {
     public static MediaType generateJsonMediaType() {
         return new MediaType(MediaType.APPLICATION_JSON.getType(), MediaType.APPLICATION_JSON.getSubtype(), StandardCharsets.UTF_8);
     }
+
+    public static BankOperationRequest generateValidRequest() {
+        return null;
+    }
 }
