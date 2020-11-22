@@ -53,7 +53,7 @@ class BankControllerTest {
 
     @Test
     void testGetBalanceHappyFlow() throws Exception {
-        doNothing().when(cardService).checkIfCardIsAuthenticated();
+        doNothing().when(cardService).checkIfCardIsNotAuthenticated();
         when(cardService.getCardId()).thenReturn(TEST_CARD_ID);
 
         BankAccount bankAccount = new BankAccount();
@@ -73,7 +73,7 @@ class BankControllerTest {
 
     @Test
     void testGetBalanceReturnsUnauthorized() throws Exception {
-        doThrow(new AccessDeniedException(BankConstants.CARD_NOT_INSERTED)).when(cardService).checkIfCardIsAuthenticated();
+        doThrow(new AccessDeniedException(BankConstants.CARD_NOT_INSERTED)).when(cardService).checkIfCardIsNotAuthenticated();
 
         this.mockMvc
                 .perform(get("/atmOperation"))
@@ -84,7 +84,7 @@ class BankControllerTest {
 
     @Test
     void testDeauthenticateHappyFlow() throws Exception {
-        doNothing().when(cardService).checkIfCardIsAuthenticated();
+        doNothing().when(cardService).checkIfCardIsNotAuthenticated();
         doNothing().when(cardService).deauthenticate();
 
         this.mockMvc
@@ -96,7 +96,7 @@ class BankControllerTest {
 
     @Test
     void testDeauthenticateUnauthorized() throws Exception {
-        doThrow(new AccessDeniedException(BankConstants.CARD_NOT_INSERTED)).when(cardService).checkIfCardIsAuthenticated();
+        doThrow(new AccessDeniedException(BankConstants.CARD_NOT_INSERTED)).when(cardService).checkIfCardIsNotAuthenticated();
 
         this.mockMvc
                 .perform(delete("/atmOperation"))
@@ -107,7 +107,7 @@ class BankControllerTest {
 
     @Test
     void testChangePinHappyFlow() throws Exception {
-        doNothing().when(cardService).checkIfCardIsAuthenticated();
+        doNothing().when(cardService).checkIfCardIsNotAuthenticated();
         doNothing().when(cardService).changePin(changePinRequest, CARD_SERVICE_ID);
         doNothing().when(cardService).deauthenticate();
 
@@ -121,7 +121,7 @@ class BankControllerTest {
 
     @Test
     void testChangePinWrongPin() throws Exception {
-        doNothing().when(cardService).checkIfCardIsAuthenticated();
+        doNothing().when(cardService).checkIfCardIsNotAuthenticated();
         doThrow(new IllegalArgumentException(BankConstants.WRONG_PIN)).when(cardService).changePin(changePinRequest, CARD_SERVICE_ID);
 
         String changePinJson = objectWriter.writeValueAsString(changePinRequest);
@@ -134,7 +134,7 @@ class BankControllerTest {
 
     @Test
     void testChangePinUnauthorized() throws Exception {
-        doThrow(new AccessDeniedException(BankConstants.CARD_NOT_INSERTED)).when(cardService).checkIfCardIsAuthenticated();
+        doThrow(new AccessDeniedException(BankConstants.CARD_NOT_INSERTED)).when(cardService).checkIfCardIsNotAuthenticated();
 
         String changePinJson = objectWriter.writeValueAsString(changePinRequest);
         this.mockMvc

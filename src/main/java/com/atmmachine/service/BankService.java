@@ -38,7 +38,7 @@ public class BankService {
         return switch (request.getOperationType()) {
             case AUTHENTICATE -> authenticate(request);
             case DEPOSIT, WITHDRAW -> {
-                cardService.checkIfCardIsAuthenticated();
+                cardService.checkIfCardIsNotAuthenticated();
                 BankAccount bankAccount = accountService.getAccountByCardId(cardService.getCardId());
                 yield accountService.depositOrWithdraw(request, bankAccount);
             }
@@ -67,7 +67,8 @@ public class BankService {
         }
     }
 
-    private String authenticate(BankOperationRequest request) throws FailedLoginException, CardNotFoundException, SQLException, AlreadyAuthenticatedException {
+    private String authenticate(BankOperationRequest request) throws FailedLoginException, CardNotFoundException, SQLException, AlreadyAuthenticatedException, AccessDeniedException {
+        cardService.checkIfCardIsAuthenticated();
         AuthenticateRequest authenticateRequest = request.getAuthenticateRequest();
         Card card = cardService.getCard(authenticateRequest.getCardId());
         if (card.getPin().equals(authenticateRequest.getPin())) {

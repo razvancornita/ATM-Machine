@@ -63,8 +63,8 @@ public class CardService {
         }
     }
 
-    public void checkIfCardIsAuthenticated() throws AccessDeniedException {
-        log.debug("checking if card is authenticated");
+    public void checkIfCardIsNotAuthenticated() throws AccessDeniedException {
+        log.debug("checking if card is not authenticated");
         if (cardId == null) {
             log.error("card is not authenticated");
             throw new AccessDeniedException(BankConstants.CARD_NOT_INSERTED);
@@ -72,12 +72,17 @@ public class CardService {
         log.debug("card with id {} is authenticated", cardId);
     }
 
-    public void authenticate(int cardId) throws AlreadyAuthenticatedException {
-        log.debug("authenticating card with id = {}", cardId);
-        if (this.cardId != null) {
-            log.error("there is already an authenticated card");
+    public void checkIfCardIsAuthenticated() throws AlreadyAuthenticatedException {
+        log.debug("checking if card is  authenticated");
+        if (cardId != null) {
+            log.error("card is authenticated");
             throw new AlreadyAuthenticatedException(this.cardId);
         }
+        log.debug("card with id {} is not authenticated", cardId);
+    }
+
+    public void authenticate(int cardId) throws AlreadyAuthenticatedException {
+        log.debug("authenticating card with id = {}", cardId);
         this.cardId = cardId;
     }
 

@@ -38,7 +38,7 @@ public class BankController {
     public ResponseEntity<String> getBalance() {
         log.debug("received getBalance request");
         try {
-            cardService.checkIfCardIsAuthenticated();
+            cardService.checkIfCardIsNotAuthenticated();
             BankAccount bankAccount = accountService.getAccountByCardId(cardService.getCardId());
             log.debug("completed getBalance request with account = {} for cardId = {}", bankAccount, cardService.getCardId());
             return ResponseEntity.ok(bankAccount.getBalance() + " " + bankAccount.getCurrency() + " left");
@@ -54,7 +54,7 @@ public class BankController {
     public ResponseEntity<String> deauthenticate() {
         log.debug("received deauthenticate request");
         try {
-            cardService.checkIfCardIsAuthenticated();
+            cardService.checkIfCardIsNotAuthenticated();
             cardService.deauthenticate();
             log.debug("finished deauthenticating");
             return ResponseEntity.ok(BankConstants.DEAUTHENTICATED);
@@ -92,7 +92,7 @@ public class BankController {
     public ResponseEntity<String> changePin(@RequestBody ChangePinRequest request) {
         log.debug("received changePin request");
         try {
-            cardService.checkIfCardIsAuthenticated();
+            cardService.checkIfCardIsNotAuthenticated();
             cardService.changePin(request, cardService.getCardId());
             cardService.deauthenticate();
             log.debug("completed changePin request");

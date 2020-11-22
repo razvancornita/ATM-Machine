@@ -1,12 +1,12 @@
 package com.atmmachine.model;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 @ToString
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Card {
     private int id;
     private int bankAccountId;

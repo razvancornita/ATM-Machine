@@ -95,18 +95,25 @@ public class CardServiceTest {
     @Test
     public void testCheckIfCardIsAuthenticatedThrowsAccessDeniedException() {
         cardService.setCardId(null);
-
-        assertThatExceptionOfType(AccessDeniedException.class)
-                .isThrownBy(() -> cardService.checkIfCardIsAuthenticated());
+        assertThatExceptionOfType(AccessDeniedException.class).isThrownBy(() -> cardService.checkIfCardIsNotAuthenticated());
     }
 
     @Test
-    public void testCheckIfCardIsAuthenticated() {
+    public void testCheckIfCardIsAuthenticated() throws AccessDeniedException {
         cardService.setCardId(TEST_CARD_ID);
-        cardService.deauthenticate();
+        cardService.checkIfCardIsNotAuthenticated();
+    }
 
-        assertThatExceptionOfType(AccessDeniedException.class)
-                .isThrownBy(() -> cardService.checkIfCardIsAuthenticated());
+    @Test
+    public void testCheckIfCardIsNotAuthenticatedThrowsAlreadyAuthenticatedException() {
+        cardService.setCardId(TEST_CARD_ID);
+        assertThatExceptionOfType(AlreadyAuthenticatedException.class).isThrownBy(() -> cardService.checkIfCardIsAuthenticated());
+    }
+
+    @Test
+    public void testCheckIfCardIsNotAuthenticated() throws AlreadyAuthenticatedException {
+        cardService.setCardId(null);
+        cardService.checkIfCardIsAuthenticated();
     }
 
     @Test
@@ -117,13 +124,6 @@ public class CardServiceTest {
     }
 
     @Test
-    public void testAuthenticateWithCardAlreadyAuthenticated() {
-        cardService.setCardId(TEST_CARD_ID);
-
-        assertThatExceptionOfType(AlreadyAuthenticatedException.class)
-                .isThrownBy(() -> cardService.authenticate(1));
-    }
-
     public void testAuthenticate() throws AlreadyAuthenticatedException {
         assertThat(cardService.getCardId() == null);
         cardService.authenticate(TEST_CARD_ID);
