@@ -48,7 +48,7 @@ public class BankServiceTest {
     @Test
     public void testValidRequest() {
         BankOperationRequest authenticateRequest = RequestGenerator.generateAuthenticateRequest();
-        BankOperationRequest depositRequest = RequestGenerator.generateDepositRequest();
+        BankOperationRequest depositRequest = RequestGenerator.generateDepositRequest(190.5);
 
         bankService.validateRequest(authenticateRequest);
         bankService.validateRequest(depositRequest);
@@ -94,7 +94,8 @@ public class BankServiceTest {
     }
 
     @Test
-    public void testSuccessfulAuthentication() throws CardNotFoundException, SQLException, InsufficientFundsException, AlreadyAuthenticatedException, FailedLoginException, AccessDeniedException {
+    public void testSuccessfulAuthentication() throws CardNotFoundException, SQLException, InsufficientFundsException,
+            AlreadyAuthenticatedException, FailedLoginException, AccessDeniedException {
         BankOperationRequest request = RequestGenerator.generateAuthenticateRequest();
         when(cardService.getCard(TEST_CARD_ID)).thenReturn(new Card(TEST_CARD_ID, 1, "1234"));
         assertEquals(bankService.handleOperation(request), BankConstants.AUTHENTICATED + request.getAuthenticateRequest().getCardId());

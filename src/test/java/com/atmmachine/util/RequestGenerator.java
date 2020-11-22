@@ -17,13 +17,13 @@ public class RequestGenerator {
                 new DepositOrWithdrawRequest(amount, Currency.EUR));
     }
 
-    public static BankOperationRequest generateDepositRequest() {
+    public static BankOperationRequest generateDepositRequest(double amount) {
         return new BankOperationRequest(OperationType.DEPOSIT, null,
-                new DepositOrWithdrawRequest(350.40, Currency.EUR));
+                new DepositOrWithdrawRequest(amount, Currency.EUR));
     }
 
     public static BankOperationRequest generateAuthenticateRequest() {
-        return new BankOperationRequest(OperationType.AUTHENTICATE, new AuthenticateRequest(1, "1234"),null);
+        return new BankOperationRequest(OperationType.AUTHENTICATE, new AuthenticateRequest(1, "1234"), null);
     }
 
 

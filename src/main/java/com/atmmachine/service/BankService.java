@@ -34,7 +34,8 @@ public class BankService {
     }
 
 
-    public String handleOperation(BankOperationRequest request) throws CardNotFoundException, FailedLoginException, SQLException, AlreadyAuthenticatedException, InsufficientFundsException, AccessDeniedException {
+    public String handleOperation(BankOperationRequest request) throws CardNotFoundException, FailedLoginException,
+            SQLException, AlreadyAuthenticatedException, InsufficientFundsException, AccessDeniedException {
         return switch (request.getOperationType()) {
             case AUTHENTICATE -> authenticate(request);
             case DEPOSIT, WITHDRAW -> {
@@ -67,7 +68,8 @@ public class BankService {
         }
     }
 
-    private String authenticate(BankOperationRequest request) throws FailedLoginException, CardNotFoundException, SQLException, AlreadyAuthenticatedException, AccessDeniedException {
+    private String authenticate(BankOperationRequest request) throws FailedLoginException, CardNotFoundException,
+            SQLException, AlreadyAuthenticatedException {
         cardService.checkIfCardIsAuthenticated();
         AuthenticateRequest authenticateRequest = request.getAuthenticateRequest();
         Card card = cardService.getCard(authenticateRequest.getCardId());
