@@ -36,6 +36,7 @@ The main restriction of this app was to have only 1 endpoint, so the app offers 
 Check the file "Business Analyisis.txt" for detailed descriptions of each method, along with their restrictions. The file can be found here: https://github.com/razvancornita/ATM-Machine/blob/main/Business%20Analysis.txt
 
 Future improvements:
+- add more currencies & call an API for conversions
 - migrate from JdbcTemplate to JPA & Hibernate
 - handle exceptions gracefully
 - handle requests in parallel
