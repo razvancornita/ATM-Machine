@@ -1,7 +1,8 @@
 # ATM-Machine
 An ATM Machine REST API
 
-Application was written in JDK 15, but requires a minimum of Java 12.
+Application was written in JDK 15, but requires a minimum of Java 12.  
+To make project run, please download intelliJ plugin called "Lombok", while also downloading JDK 12+.
 
 The app was written having production in mind, so it has a fully logging functionality, that logs every action with the 
 associated details, has a high code coverage testing, and was deployed and can be accessed in realtime. Application was 
