@@ -7,6 +7,7 @@ The app was written having production in mind, so it has a fully logging functio
 associated details, has a high code coverage testing, and was deployed and can be accessed in realtime. Application was 
 deployed to Heroku server and can be found here: https://razvans-atm-simulator.herokuapp.com/
 
+
 Postman Collection can be found here (Import - Raw): https://github.com/razvancornita/ATM-Machine/blob/main/src/main/resources/ATM-Simulator.postman_collection.json
 
 To connect to database GUI:

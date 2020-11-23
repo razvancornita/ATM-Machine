@@ -1,0 +1,86 @@
+In order to test and observe if the implemented functionalities of this application are properly working, the following
+two data Tables have been defined in the database:
+
+	•	BANK_ACCOUNT: ID, OWNER_FIRST_NAME, OWNER_LAST_NAME, CURRENCY, BALANCE
+	•	CARD: ID, BANK_ACCOUNT_ID, PIN.
+
+The following described methods are retrieving necessary data from the two tables mentioned above.
+
+Authenticate:
+This operation type is the first action to be made by any user in order to proceed further with all the others that are available.
+In this method, the “cardId” and “pin” values are retrieved from the database by using the “authenticateRequest”, which simulates
+the insert card in the ATM action, where the 2 values mentioned earlier are checked with the account information stored in “CARD”.
+Possible test scenarios:
+	•	Use the correct data for the following 2 values: “cardId”, “pin” and get following message: The PIN was correct. You are now authorized with card … .
+	•	Use nonexistent “cardId”: The card with the specified id does not exist.
+	•	Use wrong “pin”: PIN is incorrect.
+	•	Try to authenticate again (after a successful first authentication) with the same card data or any other card credentials: You are already authenticated. Please deauthenticate the card … .
+
+Remember: You need to simulate in between such test cases the operation of removing the card from the ATM (“Deauthenticate”).
+
+
+
+ChangePin:
+This operation type can only be used after previous method (Authenticate) has been succesfully passed and the user got authorized
+to perform bank operations with his own account. The 2 values defined here are "oldPin" and "newPin". In this case, the operation
+allows the user to change his associated PIN to the bank account.
+Remember: No other operation can be performed after the PIN has been successfully changed. The user is advised to reauthenticate.
+
+Possible test scenarios:
+	•	Insert correct data (4-digit number) for the both 2 values "oldPin" and "newPin" and get the following message: PIN changed successfully. Please reauthenticate.
+	•	After a successful change of the PIN, the card is basically removed out of the ATM. Try to change the PIN again, in the same dialogue. Try any other operation available. It won’t be possible, since the user has been advised to reauthenticate. The message that will be displayed in this scenario: No card was inserted. Please insert a card first.
+	•	Insert an incorrect "oldPin": PIN is incorrect.
+	•	Insert a wrong format (letters, characters, numbers with more than 4 digits) for the "newPin": PIN must be numeric and must have 4 digits.
+
+
+
+GetBalance:
+This is a simple operation, which allows the user to get real-time data of the bank account balance, including the currency. The
+information is retrieved from the BANK_ACCOUNT table, where each bank account owner has the respective information saved. As long
+as no user is authenticated (no card is inserted in the ATM), there won’t be any information available to be associated and presented.
+
+Possible test scenarios:
+	•	User is authenticated: 287.0 USD left.
+	•	No user is authenticated: No card was inserted. Please insert a card first.
+
+
+
+Deauthenticate:
+This operation is one that normally happens after the user has finished any desired action with the inserted card. To be mentioned
+that this operation proceeds automatically after each successful PIN change. Other than that, if at any time the user would like to
+remove the card from the ATM, he can use this method to simulate that action.
+
+Possible test scenarios:
+	•	User is authenticated: You have successfully deauthenticated.
+	•	No user is authenticated: No card was inserted. Please insert a card first.
+
+
+
+Deposit:
+This operation will allow any authenticated user (with the card inserted in the ATM) to deposit an amount of money into the bank
+account. The called method here is named ”depositOrWithdrawRequest” and includes the only two and most necessary parameters needed
+in this situation: "amount" and "currency". These two requested values will update the data stored in BANK_ACCOUNT accordingly.
+Note: The deposit operation can only be made if the "amount" value is divisible by 50. Any "currency" between RON, EUR and USD can
+be used for test scenarios, no matter what the currency of the bank account is. The currency exchange will be done automatically, if needed.
+
+Possible test scenarios:
+	•	User is authenticated. Insert amount divisible by 50 and choose any currency between RON, EUR and USD. After processing, following message is displayed: Operation finished successfully. Your new balance is ... .
+	•	User is authenticated. Insert amount NOT divisible by 50 and choose any currency between RON, EUR and USD. After processing, following message is displayed: Amount not divisible by 50.
+	•	User is NOT authenticated: No card was inserted. Please insert a card first.
+
+
+
+Withdraw:
+This operation will allow any authenticated user (with the card inserted in the ATM) to withdraw an amount of money from the bank
+account. The called method here is the same one used for the deposit operation (depositOrWithdrawRequest) and includes the same two
+and most necessary parameters needed in this situation: "amount" and "currency". These two requested values will update the data
+stored in BANK_ACCOUNT accordingly.
+
+Note: The deposit operation can only be made if the "amount" value is divisible by 50. Any "currency" between RON, EUR and USD can
+be used for test scenarios, no matter what the currency of the bank account is. The currency exchange will be done automatically, if needed.
+
+Possible test scenarios:
+	•	User is authenticated. Insert amount divisible by 50 and choose any currency between RON, EUR and USD. After processing, following message is displayed: Operation finished successfully. Your new balance is ... .
+	•	User is authenticated. Insert amount divisible by 50, bigger than current available funds and choose any currency between RON, EUR and USD. After processing, following message is displayed: Insufficient funds. Please try again. The balance is not updated, can be checked by using the "GetBalance" method.
+	•	User is authenticated. Insert amount NOT divisible by 50 and choose any currency between RON, EUR and USD. After processing, following message is displayed: Amount not divisible by 50.
+	•	User is NOT authenticated: No card was inserted. Please insert a card first.
