@@ -9,7 +9,7 @@ associated details, has a high code coverage testing, and was deployed and can b
 deployed to Heroku server and can be found here: https://razvans-atm-simulator.herokuapp.com/
 
 
-Postman Collection can be found here (Import - Raw): https://github.com/razvancornita/ATM-Machine/blob/main/src/main/resources/ATM-Simulator.postman_collection.json
+Postman Collection can be found here (Import - Raw): https://github.com/razvancornita/ATM-Machine/blob/main/ATM-Simulator.postman_collection.json
 
 To connect to database GUI:
 1. Go to https://razvans-atm-simulator.herokuapp.com/ or http://localhost:8090/h2-console
@@ -33,4 +33,4 @@ The main restriction of this app was to have only 1 endpoint, so the app offers 
 * DELETE - for deauthenticating
 * POST - for authenticating, depositing and withdrawing money
 
-Check the file "Business Analyisis.txt" for detailed descriptions of each method, along with their restrictions.
+Check the file "Business Analyisis.txt" for detailed descriptions of each method, along with their restrictions. The file can be found here: https://github.com/razvancornita/ATM-Machine/blob/main/Business%20Analysis.txt
