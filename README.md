@@ -32,3 +32,4 @@ The main restriction of this app was to have only 1 endpoint, so the app offers 
 * DELETE - for deauthenticating
 * POST - for authenticating, depositing and withdrawing money
 
+Check the file "Business Analyisis.txt" for detailed descriptions of each method, along with their restrictions.
