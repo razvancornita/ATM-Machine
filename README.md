@@ -34,3 +34,8 @@ The main restriction of this app was to have only 1 endpoint, so the app offers 
 * POST - for authenticating, depositing and withdrawing money
 
 Check the file "Business Analyisis.txt" for detailed descriptions of each method, along with their restrictions. The file can be found here: https://github.com/razvancornita/ATM-Machine/blob/main/Business%20Analysis.txt
+
+Future improvements:
+- migrate from JdbcTemplate to JPA & Hibernate
+- handle exceptions gracefully
+- handle requests in parallel
