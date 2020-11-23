@@ -37,6 +37,7 @@ Check the file "Business Analyisis.txt" for detailed descriptions of each method
 
 Future improvements:
 - add more currencies & call an API for conversions
+- add integration tests
 - migrate from JdbcTemplate to JPA & Hibernate
 - handle exceptions gracefully
 - handle requests in parallel
